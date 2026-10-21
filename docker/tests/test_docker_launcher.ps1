@@ -124,3 +124,7 @@ try {
     foreach ($name in $testEnvironment) { [Environment]::SetEnvironmentVariable($name, $savedEnvironment[$name], 'Process') }
     Remove-Item -LiteralPath $sandbox -Recurse -Force -ErrorAction SilentlyContinue
 }
+# Reached only after every assertion succeeds. The last case intentionally
+# runs a failing child; do not let its LASTEXITCODE fail the Actions wrapper.
+# An assertion exception propagates through finally and never reaches this.
+exit 0

@@ -12,7 +12,7 @@ if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
 }
 # Do not redirect native stderr under ErrorActionPreference=Stop: Windows
 # PowerShell 5.1 may terminate before the explicit exit-code checks below.
-& docker info --format '{{.OSType}}' | Out-Variable osType | Out-Null
+$osType = & docker info --format '{{.OSType}}'
 if ($LASTEXITCODE -ne 0) { throw 'Docker Desktop is not running. Start it, then try again.' }
 if ("$osType".Trim() -ne 'linux') { throw 'Switch Docker Desktop to Linux containers.' }
 & docker compose version | Out-Null

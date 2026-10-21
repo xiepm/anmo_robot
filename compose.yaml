@@ -1,0 +1,19 @@
+name: anmo-robot-demo
+services:
+  demo:
+    image: anmo-robot-demo:local
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - "127.0.0.1:${ANMO_PORT:-5173}:8080"
+    init: true
+    restart: "no"
+    read_only: true
+    tmpfs:
+      - /tmp:rw,nosuid,size=64m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    stop_grace_period: 15s

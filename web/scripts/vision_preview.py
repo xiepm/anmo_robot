@@ -269,8 +269,15 @@ def main():
         parser.error('预览端口不能占用网页或公共控制端口')
     root = Path(__file__).resolve().parents[2]
     vision_dir = root / 'zhenjiu'
+    sys.path.insert(0, str(vision_dir))
+    from rehab_vision.camera_lock import CameraLock
+    camera_lock = CameraLock().acquire()
     frames = LatestFrame()
-    server = create_server(frames, args.port)  # Fail before camera open if occupied.
+    try:
+        server = create_server(frames, args.port)  # Fail before camera open if occupied.
+    except BaseException:
+        camera_lock.close()
+        raise
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     print(f'穴位实时预览 http://127.0.0.1:{args.port}/frame.jpg', flush=True)
@@ -278,6 +285,8 @@ def main():
     def terminate(*_):
         raise KeyboardInterrupt
     signal.signal(signal.SIGTERM, terminate)
+    if hasattr(signal, 'SIGBREAK'):
+        signal.signal(signal.SIGBREAK, terminate)
     original_render = None
     original_project = None
     original_read = None
@@ -285,7 +294,6 @@ def main():
     bridge = None
     locator = None
     try:
-        sys.path.insert(0, str(vision_dir))
         import acupoint_locator_refactored as locator
         from rehab_vision.base_client import BaseClient
         from live_locate_bridge import LiveLocateBridge
@@ -406,6 +414,7 @@ def main():
                     capture_time_valid=packet['data'].get('capture_time_valid',False),
                     rgb_exposure_us=clock['color']['actual_exposure_us'] if clock else None,
                     depth_exposure_us=clock['depth']['actual_exposure_us'] if clock else None,
+                    diagnostics=metadata.get('exposure_clock_diagnostics'),
                     error=metadata.get('exposure_clock_error') or packet['data'].get('error') or packet['data'].get('capture_time_error',''))
             def capture_snapshot():
                 if last_capture.get('received') != received_at or last_capture.get('number') != metadata['color_frame_number']:
@@ -491,6 +500,7 @@ def main():
         server.shutdown()
         server.server_close()
         thread.join(timeout=2)
+        camera_lock.close()
 
 
 if __name__ == '__main__':

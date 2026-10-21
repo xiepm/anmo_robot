@@ -4,12 +4,17 @@ import { test } from 'node:test'
 import ts from 'typescript'
 import { createPinia, setActivePinia } from 'pinia'
 
-async function sourceModule(relative) {
+const endpointsSource = await readFile(new URL('../src/utils/endpoints.ts', import.meta.url), 'utf8')
+const endpointsCode = ts.transpileModule(endpointsSource, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText
+const endpointsUrl = `data:text/javascript;base64,${Buffer.from(endpointsCode).toString('base64')}`
+
+async function sourceModule(relative, robotUrl) {
   let source = await readFile(new URL(relative, import.meta.url), 'utf8')
-  source = source.replace('import.meta.env.VITE_ROBOT_WS_URL', 'undefined')
+  source = source.replace('import.meta.env.VITE_ROBOT_WS_URL', JSON.stringify(robotUrl) ?? 'undefined')
   const output = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText
     .replaceAll("from 'vue'", `from '${import.meta.resolve('vue')}'`)
     .replaceAll("from 'pinia'", `from '${import.meta.resolve('pinia')}'`)
+    .replaceAll("from '@/utils/endpoints'", `from '${endpointsUrl}'`)
   return import(`data:text/javascript;base64,${Buffer.from(output).toString('base64')}`)
 }
 const { ScanTracker, planBlockReason } = await sourceModule('../src/utils/controlChecks.ts')
@@ -69,26 +74,38 @@ class FakeSocket {
   static instances = []
   readyState = 0
   sent = []
-  constructor() { FakeSocket.instances.push(this) }
+  constructor(url) { this.url = url; FakeSocket.instances.push(this) }
   open() { this.readyState = 1; this.onopen() }
   send(raw) { this.sent.push(JSON.parse(raw)) }
   message(value) { this.onmessage({ data: JSON.stringify(value) }) }
   close() { this.readyState = 3; this.onclose() }
 }
-function setup(t) {
+function setup(t, useStore = useRobotStore) {
   t.mock.timers.enable({ apis: ['setTimeout', 'setInterval'] })
   const originalSocket = globalThis.WebSocket
   globalThis.WebSocket = FakeSocket
   t.after(() => { globalThis.WebSocket = originalSocket })
   FakeSocket.instances = []
   setActivePinia(createPinia())
-  const store = useRobotStore()
+  const store = useStore()
   store.start()
   const socket = FakeSocket.instances[0]
   socket.open()
   socket.message({ type: 'STATUS', data: status() })
   return { store, socket }
 }
+test('the actual Docker store opens the same-origin secure proxy and initially sends only GET_STATUS', async t => {
+  const originalLocation = Object.getOwnPropertyDescriptor(globalThis, 'location')
+  Object.defineProperty(globalThis, 'location', { configurable: true, value: { href: 'https://windows-demo:8443/confirm' } })
+  t.after(() => {
+    if (originalLocation) Object.defineProperty(globalThis, 'location', originalLocation)
+    else delete globalThis.location
+  })
+  const { useRobotStore: dockerStore } = await sourceModule('../src/stores/robot.ts', '/control')
+  const { socket } = setup(t, dockerStore)
+  assert.equal(socket.url, 'wss://windows-demo:8443/control')
+  assert.deepEqual(socket.sent, [{ cmd: 'GET_STATUS', data: {} }])
+})
 test('a reply alone never satisfies READY/RUNNING state confirmation', async t => {
   const { store, socket } = setup(t)
   const baseline = store.statusRevision

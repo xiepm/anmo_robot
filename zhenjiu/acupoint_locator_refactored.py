@@ -650,6 +650,10 @@ class RealSenseCapture:
         self.width = int(width)
         self.height = int(height)
         self.fps = int(fps)
+        self.opened = False
+        self.capture_clock = None
+        self.clock_setup_error = ''
+        self.frame_metadata = {}
         self.pipeline = rs.pipeline()
         config = rs.config()
         config.enable_stream(rs.stream.depth, self.width, self.height, rs.format.z16, self.fps)
@@ -657,12 +661,20 @@ class RealSenseCapture:
         try:
             profile = self.pipeline.start(config)
             self.serial = profile.get_device().get_info(rs.camera_info.serial_number)
+        except RuntimeError as exc:
+            try:
+                self.pipeline.stop()
+            except RuntimeError:
+                pass
+            raise RuntimeError(f"无法启动 Intel RealSense 彩色/深度流: {exc}") from exc
+        # A platform/driver may expose RGB-D without a usable global clock.
+        # Keep those actual frames visible, while withholding timing evidence.
+        try:
             for sensor in profile.get_device().query_sensors():
                 if sensor.supports(rs.option.global_time_enabled):
                     sensor.set_option(rs.option.global_time_enabled, 1)
         except RuntimeError as exc:
-            raise RuntimeError(f"无法启动 Intel RealSense 彩色/深度流: {exc}") from exc
-        self.capture_clock = None
+            self.clock_setup_error = f'相机全局时钟设置失败，仅可预览: {exc}'
         if manual_rgb_exposure is not None:
             from rehab_vision.capture_clock import CaptureClock
             self.capture_clock = CaptureClock(rs, profile, manual_rgb_exposure, self.fps)
@@ -688,6 +700,7 @@ class RealSenseCapture:
         # color-view depth frame. Never retain a native frame across failures.
         self.raw_depth_frame = None
         self.depth_frame = None
+        self.frame_metadata = {}
         try:
             raw_frames = self.pipeline.wait_for_frames(5000)
             raw_depth = raw_frames.get_depth_frame()
@@ -712,6 +725,8 @@ class RealSenseCapture:
             # Preserve raw clock evidence. Only the control process may validate
             # a capture/robot pairing; host receipt is never labelled exposure.
             try:
+                if getattr(self, 'clock_setup_error', ''):
+                    raise ValueError(self.clock_setup_error)
                 if self.capture_clock is None:
                     raise ValueError('未启用经过单位核对的手动曝光采集配置')
                 self.frame_metadata['exposure_clock']=self.capture_clock.read(color_frame,self.depth_frame)
@@ -720,6 +735,9 @@ class RealSenseCapture:
                 if getattr(self,'last_clock_error',None)!=str(exc):
                     print(f'曝光时钟校验未就绪：{exc}',file=sys.stderr)
                 self.last_clock_error=str(exc)
+            diagnostics = getattr(self.capture_clock, 'diagnostics', None)
+            if diagnostics is not None:
+                self.frame_metadata['exposure_clock_diagnostics'] = diagnostics(color_frame, raw_depth)
             return True, np.asanyarray(color_frame.get_data())
         except RuntimeError as exc:
             self.raw_depth_frame = self.depth_frame = None

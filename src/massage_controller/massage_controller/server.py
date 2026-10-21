@@ -34,7 +34,7 @@ class Server:
         if not schema.exists():
             from ament_index_python.packages import get_package_share_directory
             schema = Path(get_package_share_directory('massage_controller')) / 'rehab_protocol/base_coordinates_request.schema.json'
-        self.base_request_schema = json.loads(schema.read_text())
+        self.base_request_schema = json.loads(schema.read_text(encoding='utf-8-sig'))
 
     async def coordinates(self, ws):
         """Same control process/SDK owner; this endpoint never calls motion APIs."""

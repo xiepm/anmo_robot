@@ -1,0 +1,6 @@
+{
+  "robot_config": "src/massage_controller/config/real_robot.json",
+  "hand_eye": "zhenjiu/hand_eye/calibration.local.json",
+  "capture_timing": "config/commissioning/capture_timing.local.json",
+  "noncontact_config": "config/commissioning/noncontact.local.json"
+}

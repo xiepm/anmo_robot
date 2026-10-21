@@ -9,6 +9,7 @@ import { ScanTracker } from '@/utils/controlChecks'
 const router = useRouter()
 const flow = useFlowStore()
 const robot = useRobotStore()
+const demoMode = import.meta.env.VITE_DEMO_MODE === 'true'
 const statusText = ref('正在发送扫描请求')
 const failed = ref(false)
 let tracker: ScanTracker | null = null
@@ -62,7 +63,7 @@ onMounted(async () => {
   const reply = await robot.request('SCAN', { region })
   if (disposed || leaving || failed.value) return
   handle(tracker.acknowledge(reply))
-  if (!failed.value && !leaving) statusText.value = '正在识别人体轮廓'
+  if (!failed.value && !leaving) statusText.value = demoMode ? '正在获取模拟定位结果' : '正在识别人体轮廓'
 })
 
 watch(() => robot.status, status => {
@@ -81,8 +82,8 @@ onBeforeUnmount(() => {
 <template>
   <section class="scan-screen">
     <div class="scan-body">
-      <h1 class="scan-title">正在拍照并识别穴位</h1>
-      <p class="scan-desc">请保持姿势，正在采集本次图像并识别穴位，图像仅在本次流程中使用。</p>
+      <h1 class="scan-title">{{ demoMode ? '正在模拟穴位定位' : '正在拍照并识别穴位' }}</h1>
+      <p class="scan-desc">{{ demoMode ? '使用模拟点位演示操作流程，不采集图像，不连接真实设备。' : '请保持姿势，正在采集本次图像并识别穴位，图像仅在本次流程中使用。' }}</p>
 
       <div class="scan-track">
         <div class="scan-bar" :class="{ 'is-failed': failed }" />

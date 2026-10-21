@@ -14,9 +14,10 @@ import time
 
 from .geometry import rigid, camera_to_base_m
 from .sdk_readonly import ReadOnlyReader
+from .host_clock import get_host_boot_id
 
 REFERENCE = 'virtual_flange_with_joint6_zero'
-BOOT_ID = Path('/proc/sys/kernel/random/boot_id').read_text().strip()
+BOOT_ID = get_host_boot_id()
 
 
 class ReferenceReader(ReadOnlyReader):

@@ -61,3 +61,7 @@ backups/
 /zhenjiu/hand_eye/*.csv
 /zhenjiu/hand_eye/sample_*.json
 /zhenjiu/hand_eye/candidate_*.json
+
+# Windows native bundle output and per-installation paths.
+/web/dist-native/
+/windows/device.local.json

@@ -1,6 +1,7 @@
 """Read-only coordinate RPC to the control process; no SDK import or robot socket."""
 import json
 from pathlib import Path
+import sys
 import time
 from urllib.parse import urlsplit
 
@@ -8,7 +9,10 @@ from jsonschema import Draft202012Validator
 from websockets.sync.client import connect
 from .contract import DEFAULT_CONTRACT, strict_json
 
-BOOT_ID = Path('/proc/sys/kernel/random/boot_id').read_text().strip()
+CONTROL_SOURCE = Path(__file__).resolve().parents[2] / 'src/massage_controller'
+if str(CONTROL_SOURCE) not in sys.path:
+    sys.path.insert(0, str(CONTROL_SOURCE))
+from massage_controller.host_clock import get_host_boot_id
 
 
 class BaseClient:
@@ -18,8 +22,15 @@ class BaseClient:
                 or parsed.path != '/coordinates' or parsed.query or parsed.fragment):
             raise ValueError('坐标服务只允许本机 ws://.../coordinates')
         self.uri, self.ws, self.retry_at = uri, None, 0.
+        self.boot_id, self.clock_error = '', ''
+        try:
+            self.boot_id = get_host_boot_id()
+        except (OSError, RuntimeError, ValueError) as exc:
+            # RGB-D preview must survive an unavailable host identity, but no
+            # coordinate request may use a guessed or empty boot identifier.
+            self.clock_error = f'无法核对本次系统启动标识: {exc}'
         self.validator = Draft202012Validator(json.loads(
-            (DEFAULT_CONTRACT/'base_coordinates_response.schema.json').read_text()))
+            (DEFAULT_CONTRACT/'base_coordinates_response.schema.json').read_text(encoding='utf-8')))
 
     def project(self, points, metadata, received_at):
         raw = []
@@ -29,12 +40,14 @@ class BaseClient:
                 coordinate_valid=bool(p.get('coordinate_valid')),
                 camera_point_mm=p.get('camera_point_mm') if p.get('coordinate_valid') else None))
         data = dict(frame='camera_color_optical_frame', camera_serial=metadata.get('camera_serial','unknown'),
-            host_boot_id=BOOT_ID, frame_number=int(metadata.get('color_frame_number',0)),
+            host_boot_id=self.boot_id, frame_number=int(metadata.get('color_frame_number',0)),
             frame_received_monotonic_s=received_at, points=raw)
         if metadata.get('exposure_clock'):
             data['exposure_clock']=metadata['exposure_clock']
         attempted = False
         try:
+            if self.clock_error:
+                raise RuntimeError(self.clock_error)
             if not self.ws:
                 if time.monotonic() < self.retry_at:
                     raise ConnectionError('等待控制坐标服务重连')
@@ -45,7 +58,7 @@ class BaseClient:
             answer = strict_json(self.ws.recv(timeout=.8))
             self.validator.validate(answer)
             d = answer['data']
-            if (d['frame_number'] != data['frame_number'] or d['host_boot_id'] != BOOT_ID
+            if (d['frame_number'] != data['frame_number'] or d['host_boot_id'] != self.boot_id
                     or d['camera_serial'] != data['camera_serial']
                     or d['frame_received_monotonic_s'] != received_at
                     or time.monotonic() > d['valid_until_monotonic_s']):
@@ -59,7 +72,7 @@ class BaseClient:
             return dict(type='BASE_COORDINATES', data=dict(
                 frame='robot_base', units='mm', camera_serial=data['camera_serial'],
                 frame_number=data['frame_number'], frame_received_monotonic_s=received_at,
-                host_boot_id=BOOT_ID, generated_monotonic_s=time.monotonic(),
+                host_boot_id=self.boot_id, generated_monotonic_s=time.monotonic(),
                 valid_until_monotonic_s=received_at, capture_time_valid=False, motion_eligible=False,
                 pairing_method='stationary_host_receipt_preview', reference_frame='virtual_flange_with_joint6_zero',
                 calibration_sha256=None, feedback_window=None,
@@ -76,7 +89,7 @@ def write_latest(path, packet):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     temp = path.with_name(path.name+'.tmp')
-    temp.write_text(json.dumps(packet, ensure_ascii=False, indent=2, allow_nan=False)+'\n')
+    temp.write_text(json.dumps(packet, ensure_ascii=False, indent=2, allow_nan=False)+'\n', encoding='utf-8')
     temp.replace(path)
 
 

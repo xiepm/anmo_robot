@@ -173,7 +173,7 @@ def load(path):
                 raise ValueError(f'JSON 重复字段: {key}')
             result[key] = value
         return result
-    return validate(json.loads(Path(path).read_text(), object_pairs_hook=unique))
+    return validate(json.loads(Path(path).read_text(encoding='utf-8-sig'), object_pairs_hook=unique))
 
 
 def digest(plan):

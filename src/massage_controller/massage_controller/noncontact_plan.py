@@ -18,7 +18,7 @@ SEGMENTED_ROUTE = 'CURRENT_HEIGHT_THEN_ABOVE_POINTS'
 
 
 def load_profile(path):
-    return json.loads(Path(path).read_text())
+    return json.loads(Path(path).read_text(encoding='utf-8-sig'))
 
 
 def profile_errors(p, pending_scene=False, require_path_confirmation=True):

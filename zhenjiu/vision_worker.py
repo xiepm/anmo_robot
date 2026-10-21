@@ -2,18 +2,18 @@
 """Headless vision worker entry; REAL by default, no SDK or robot operations."""
 import argparse
 import asyncio
-import fcntl
 import json
 import logging
 import math
 from pathlib import Path
-import signal
 from urllib.parse import urlsplit
 
 from rehab_vision.backends import PoseModel, RealSource, ReplayModel, ReplaySource
 from rehab_vision.client import run_client
 from rehab_vision.contract import Contract, DEFAULT_CONTRACT
 from rehab_vision.engine import Engine
+from rehab_vision.camera_lock import CameraLock
+from massage_controller.platform_runtime import StopSignals
 
 APP = Path(__file__).resolve().parent
 
@@ -34,20 +34,22 @@ async def run(args):
     engine = Engine(source, model, contract, base_client=base)
     stop = asyncio.Event()
     loop = asyncio.get_running_loop()
-    for sig in (signal.SIGINT, signal.SIGTERM):
-        loop.add_signal_handler(sig, stop.set)
+    signals = StopSignals(loop, stop.set)
     timer = loop.call_later(args.run_seconds, stop.set) if args.run_seconds else None
-    engine.start()
     try:
+        engine.start()
         await run_client(engine, contract, args.uri, stop, args.locate_timeout)
     finally:
-        if timer:
-            timer.cancel()
-        diagnostics = dict(health=engine.health(), diagnostics=engine.diagnostics())
-        await asyncio.to_thread(engine.close)
-        if args.diagnostics:
-            Path(args.diagnostics).write_text(json.dumps(diagnostics, ensure_ascii=False, indent=2))
-        logging.info('视觉进程已退出；相机已释放或底层超时已记录')
+        try:
+            if timer:
+                timer.cancel()
+            diagnostics = dict(health=engine.health(), diagnostics=engine.diagnostics())
+            await asyncio.to_thread(engine.close)
+            if args.diagnostics:
+                Path(args.diagnostics).write_text(json.dumps(diagnostics, ensure_ascii=False, indent=2), encoding='utf-8')
+            logging.info('视觉进程已退出；相机已释放或底层超时已记录')
+        finally:
+            signals.close()
 
 
 def main():
@@ -71,11 +73,10 @@ def main():
     # No process-killing fallback: second worker must fail rather than steal the device.
     lock = None
     if not args.replay:
-        lock = (APP / '.vision_worker.lock').open('a')
         try:
-            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except BlockingIOError:
-            p.error('已有 REAL vision_worker 运行；请先退出原进程')
+            lock = CameraLock().acquire()
+        except (RuntimeError, OSError) as exc:
+            p.error(str(exc))
     try:
         asyncio.run(run(args))
     finally:

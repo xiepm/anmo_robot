@@ -3,10 +3,10 @@ import asyncio
 import json
 import logging
 from pathlib import Path
-import signal
 import time
 from .protocol import load_contract
 from .server import Server
+from .platform_runtime import StopSignals
 
 
 def default_config():
@@ -76,7 +76,7 @@ async def run(args, node=None):
     route_review = None
     if args.backend == 'real':
         from .real_device import FeedbackWorker, RealDevices, mapped_joints
-        cfg = json.loads(Path(args.robot_config).read_text())
+        cfg = json.loads(Path(args.robot_config).read_text(encoding='utf-8-sig'))
         if args.robot_host: cfg['host'] = args.robot_host
         if args.robot_port: cfg['port'] = args.robot_port
         mapped_joints({'joint_positions_deg':[0]*6}, cfg)
@@ -88,7 +88,7 @@ async def run(args, node=None):
             load_profile(args.noncontact_config)  # Fail on unreadable/malformed JSON.
             directory = workspace / 'src/massage_controller/reports/noncontact_runs'
             directory.mkdir(parents=True, exist_ok=True)
-            motion_log = (directory / f'{time.time_ns()}.jsonl').open('x', buffering=1)
+            motion_log = (directory / f'{time.time_ns()}.jsonl').open('x', buffering=1, encoding='utf-8')
             def record_motion(value):
                 motion_log.write(json.dumps(value, ensure_ascii=False, allow_nan=False)+'\n')
             worker = NoncontactWorker(cfg,sdk_path,record_motion)
@@ -105,8 +105,7 @@ async def run(args, node=None):
             defer_virtual_model=load_profile(args.noncontact_config).get('virtual_model_check')=='DEFERRED')
         server.core.noncontact = NoncontactControl(server.core,args.noncontact_config,worker,review=route_review)
     done = asyncio.Event()
-    for sig in (signal.SIGINT, signal.SIGTERM):
-        asyncio.get_running_loop().add_signal_handler(sig, done.set)
+    signals = StopSignals(asyncio.get_running_loop(), done.set)
     try:
         # Reserve communication endpoints before opening an SDK connection.
         await server.start()
@@ -128,11 +127,14 @@ async def run(args, node=None):
         else:
             await done.wait()
     finally:
-        if route_review: route_review.cancel.set()
-        await server.close()
-        if route_review: await asyncio.to_thread(route_review.close)
-        if worker: await asyncio.to_thread(worker.close)
-        if motion_log: motion_log.close()
+        try:
+            if route_review: route_review.cancel.set()
+            await server.close()
+            if route_review: await asyncio.to_thread(route_review.close)
+            if worker: await asyncio.to_thread(worker.close)
+            if motion_log: motion_log.close()
+        finally:
+            signals.close()
 
 
 def main():

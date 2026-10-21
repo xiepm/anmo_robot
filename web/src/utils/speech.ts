@@ -4,6 +4,9 @@
  */
 import { useSettingsStore } from '@/stores/settings'
 
+// Static Docker demos have no neural-voice server; local Vite behavior remains unchanged.
+const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === 'true'
+
 /** 最短有效静音 wav，在用户点击时解锁后续神经音播放 */
 const SILENT_WAV =
   'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQQAAAAAAA=='
@@ -45,6 +48,7 @@ export function stopSpeech() {
 
 /** 在用户手势中解锁音频，必须同步调用 */
 export function unlockSpeech() {
+  if (DEMO_MODE) return
   try {
     const AC =
       window.AudioContext ||
@@ -94,7 +98,7 @@ function loadNeuralAudio(text: string): Promise<Blob> {
 /** 提前合成，进入运行页时直接播放已缓存的音频 */
 export function prefetchSpeech(text: string) {
   const content = text.trim()
-  if (!content || typeof window === 'undefined') return
+  if (DEMO_MODE || !content || typeof window === 'undefined') return
   void loadNeuralAudio(content).catch(() => {
     /* 预取失败时，正式播报会再请求一次 */
   })
@@ -103,7 +107,7 @@ export function prefetchSpeech(text: string) {
 /** 播报流程短句；静音或神经音失败时不改用系统语音 */
 export function speak(text: string) {
   const content = text.trim()
-  if (!content || typeof window === 'undefined' || isMuted()) return
+  if (DEMO_MODE || !content || typeof window === 'undefined' || isMuted()) return
 
   const token = ++speakSeq
   if (player) player.pause()

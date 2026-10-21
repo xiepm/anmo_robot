@@ -35,9 +35,9 @@ def strict_json(raw):
 class Contract:
     def __init__(self, directory=DEFAULT_CONTRACT):
         root = Path(directory)
-        self.regions = strict_json((root / 'acupoints.json').read_text())['regions']
-        self.request = Draft202012Validator(json.loads((root / 'vision_request.schema.json').read_text()))
-        self.message = Draft202012Validator(json.loads((root / 'vision_message.schema.json').read_text()))
+        self.regions = strict_json((root / 'acupoints.json').read_text(encoding='utf-8'))['regions']
+        self.request = Draft202012Validator(json.loads((root / 'vision_request.schema.json').read_text(encoding='utf-8')))
+        self.message = Draft202012Validator(json.loads((root / 'vision_message.schema.json').read_text(encoding='utf-8')))
 
     def decode(self, raw):
         obj = strict_json(raw)

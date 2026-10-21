@@ -110,7 +110,7 @@ class ReplaySource:
     mode = 'SIMULATION'
 
     def __init__(self, path=None, records=None):
-        self.records = records if records is not None else json.loads(Path(path).read_text())['frames']
+        self.records = records if records is not None else json.loads(Path(path).read_text(encoding='utf-8'))['frames']
         if not self.records:
             raise ValueError('回放 frames 不能为空')
         self.index = 0

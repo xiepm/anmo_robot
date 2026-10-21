@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { ProtocolPoint } from '@/types/robot'
 import { toPointLabel } from '@/data/points'
 import { clampPixel, parsePhotoData, pointKey, routeSegments, type Capture, type PhotoAdjustment, type PhotoData } from '@/utils/photoEditor'
+import { visionResourceUrl } from '@/utils/endpoints'
 
 const props = defineProps<{ capture: Capture; points: ProtocolPoint[]; adjustments: PhotoAdjustment[]; locked?: boolean; confirmed?: boolean }>()
 const emit = defineEmits<{ change: [points: PhotoAdjustment[]]; positions: [points: PhotoAdjustment[]]; ready: [value: boolean]; editing: [value: boolean] }>()
@@ -33,8 +34,7 @@ const canEdit = computed(() => loaded.value && !error.value && !props.locked)
 watch(() => props.locked, value => { if (value) { cancelDrag(); editing.value = false } })
 
 function endpoint(path: string) {
-  const url = new URL(import.meta.env.VITE_VISION_PREVIEW_URL || 'http://127.0.0.1:8767/frame.jpg')
-  url.pathname = path
+  const url = visionResourceUrl(import.meta.env.VITE_VISION_PREVIEW_URL, path)
   url.search = new URLSearchParams({ frame: String(props.capture.frame_number), received: String(props.capture.received_monotonic_s) }).toString()
   return url.href
 }

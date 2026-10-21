@@ -1,0 +1,87 @@
+name: Windows native package
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'windows/**'
+      - 'web/**'
+      - 'zhenjiu/**'
+      - 'src/massage_controller/**'
+      - 'config/**'
+      - '.github/workflows/windows-native.yml'
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-check-and-package:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          architecture: x64
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install independent Windows dependencies
+        shell: powershell
+        run: |
+          python -m venv .venv-control-windows
+          if ($LASTEXITCODE) { throw 'control venv failed' }
+          python -m venv .venv-vision-windows
+          if ($LASTEXITCODE) { throw 'vision venv failed' }
+          .\.venv-control-windows\Scripts\python.exe -m pip install --only-binary=:all: -r windows/requirements-control.txt
+          if ($LASTEXITCODE) { throw 'control dependencies failed' }
+          .\.venv-vision-windows\Scripts\python.exe -m pip install --only-binary=:all: -r windows/requirements-vision.txt
+          if ($LASTEXITCODE) { throw 'vision dependencies failed' }
+      - name: Check native imports, boot identity, locks and launchers (no hardware)
+        shell: powershell
+        run: |
+          $env:PYTHONUTF8 = '1'
+          $env:PYTHONPATH = "$pwd/src/massage_controller"
+          .\.venv-control-windows\Scripts\python.exe -c 'import numpy,scipy,websockets,jsonschema'
+          if ($LASTEXITCODE) { throw 'control imports failed' }
+          .\.venv-vision-windows\Scripts\python.exe -c 'import cv2,numpy,onnxruntime,pyrealsense2,mediapipe'
+          if ($LASTEXITCODE) { throw 'vision imports failed' }
+          .\.venv-control-windows\Scripts\python.exe -m unittest discover -s src/massage_controller/test -p test_windows_platform.py -v
+          if ($LASTEXITCODE) { throw 'native platform tests failed' }
+          .\.venv-control-windows\Scripts\python.exe -m unittest discover -s windows/tests -v
+          if ($LASTEXITCODE) { throw 'native package tests failed' }
+          Get-ChildItem windows/*.ps1 | ForEach-Object {
+            $tokens = $null
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile($_.FullName, [ref]$tokens, [ref]$errors) | Out-Null
+            if ($errors.Count) { throw ($errors | Out-String) }
+          }
+      - name: Build native UI
+        shell: powershell
+        working-directory: web
+        env:
+          VITE_DEMO_MODE: 'false'
+          VITE_ROBOT_WS_URL: 'ws://127.0.0.1:8765'
+          VITE_VISION_PREVIEW_URL: 'http://127.0.0.1:8767/frame.jpg'
+        run: |
+          npm ci
+          if ($LASTEXITCODE) { throw 'npm ci failed' }
+          node node_modules/vue-tsc/bin/vue-tsc.js -b
+          if ($LASTEXITCODE) { throw 'typecheck failed' }
+          node node_modules/vite/bin/vite.js build --outDir dist-native
+          if ($LASTEXITCODE) { throw 'native UI build failed' }
+      - name: Assemble installable source and prebuilt UI
+        shell: powershell
+        run: |
+          git archive --format=zip HEAD -o source.zip
+          if ($LASTEXITCODE) { throw 'source export failed' }
+          Expand-Archive source.zip bundle
+          Copy-Item web/dist-native bundle/web/dist-native -Recurse
+          Set-Content -Encoding UTF8 bundle/START-HERE.md 'Read [installation and device validation](docs/WINDOWS_NATIVE.md), then run windows/Install-Native.cmd.'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: anmo-robot-windows-native
+          path: bundle/
+          retention-days: 30

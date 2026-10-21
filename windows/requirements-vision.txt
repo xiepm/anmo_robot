@@ -1,0 +1,4 @@
+# Native Windows vision environment (CPython 3.12 x64).
+# Keep the existing vision versions, including websockets 13.1 and MediaPipe.
+# All pinned packages have compatible win_amd64 / universal wheels on PyPI.
+-r ../zhenjiu/requirements.txt

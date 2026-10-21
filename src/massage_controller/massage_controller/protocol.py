@@ -7,7 +7,7 @@ from jsonschema import Draft202012Validator
 
 def load_contract(path):
     p = Path(path)
-    return {n: json.loads((p / (n + '.json')).read_text()) for n in
+    return {n: json.loads((p / (n + '.json')).read_text(encoding='utf-8-sig')) for n in
             ('acupoints', 'simulation', 'ui_request.schema', 'vision_message.schema')}
 
 

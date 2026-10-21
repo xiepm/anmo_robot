@@ -3,8 +3,6 @@ import asyncio
 from datetime import datetime, timezone
 import json
 from pathlib import Path
-import select
-import signal
 import socket
 import sys
 import threading
@@ -13,6 +11,7 @@ import time
 from .real_device import RealDevices
 from .waypoint_motion import MotionReader, WaypointSession
 from .waypoint_plan import load, digest
+from .platform_runtime import ConsoleLines, StopSignals
 
 
 class WaypointTelemetry(RealDevices):
@@ -30,7 +29,7 @@ async def run(args, node=None):
     plan = load(args.waypoint_plan)
     if not sys.stdin.isatty():
         raise ValueError('--execute 必须从交互终端运行；启动后在 READY 输入 START')
-    cfg = json.loads(Path(args.robot_config).read_text())
+    cfg = json.loads(Path(args.robot_config).read_text(encoding='utf-8-sig'))
     if cfg.get('robot_model') != 'elfin5_l' or cfg.get('model_confirmed') is not True:
         raise ValueError('实机配置必须确认 elfin5_l 型号')
     if args.robot_host: cfg['host'] = args.robot_host
@@ -42,6 +41,7 @@ async def run(args, node=None):
     sockets = []
     session = None
     thread = None
+    signals = None
     try:
         for port in (args.ui_port, args.vision_port):
             sock = socket.socket()
@@ -51,7 +51,7 @@ async def run(args, node=None):
         directory.mkdir(parents=True, exist_ok=True)
         name = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
         path = directory / f'{name}.jsonl'
-        with path.open('x', buffering=1) as log:
+        with path.open('x', buffering=1, encoding='utf-8') as log:
             def record(value):
                 log.write(json.dumps(value, ensure_ascii=False, allow_nan=False)+'\n')
             reader = MotionReader(sdk, cfg['host'], cfg['port'], timeout_s=.15)
@@ -65,8 +65,8 @@ async def run(args, node=None):
                 status_pub = node.create_publisher(String, '~/status', 10)
                 node.create_subscription(String, '~/stop', lambda _: session.request_stop(), 10)
             loop = asyncio.get_running_loop()
-            for sig in (signal.SIGINT, signal.SIGTERM):
-                loop.add_signal_handler(sig, session.request_stop)
+            signals = StopSignals(loop, session.request_stop)
+            console = ConsoleLines()
             print(f'方案 SHA256: {digest(plan)}\n日志: {path}\n仅 READY 时接受 START；STOP / Ctrl+C 请求停止。', flush=True)
             thread = threading.Thread(target=session.run, name='huayan-waypoint', daemon=True)
             thread.start()
@@ -76,8 +76,7 @@ async def run(args, node=None):
                 if node:
                     if not rclpy.ok(): session.request_stop()
                     else: rclpy.spin_once(node, timeout_sec=0)
-                if select.select([sys.stdin], [], [], 0)[0]:
-                    line = sys.stdin.readline()
+                for line in console.poll():
                     if not line or line.strip().upper() == 'STOP':
                         session.request_stop()
                     elif line.strip().upper() == 'START':
@@ -113,3 +112,5 @@ async def run(args, node=None):
                 await asyncio.sleep(.05)
         for sock in sockets:
             sock.close()
+        if signals:
+            signals.close()

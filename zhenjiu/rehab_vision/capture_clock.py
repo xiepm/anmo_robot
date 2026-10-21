@@ -14,6 +14,7 @@ CONTROL_SOURCE = Path(__file__).resolve().parents[2] / 'src/massage_controller'
 if str(CONTROL_SOURCE) not in sys.path:
     sys.path.insert(0, str(CONTROL_SOURCE))
 from massage_controller.capture_policy import load_capture_policy, policy_identity
+from .camera_diagnostics import frame_diagnostics
 
 MODEL = 'D435I_MANUAL_RGB_INTERVAL_V1'
 
@@ -24,11 +25,13 @@ class CaptureClock:
         self.ready_at = time.monotonic()+2
         self.good = 0
         self.error = ''
-        device = profile.get_device()
-        self.identity = dict(camera_serial=device.get_info(rs.camera_info.serial_number),
-            firmware=device.get_info(rs.camera_info.firmware_version), sdk_version=rs.__version__)
+        self.identity = {}
         self.exposure = exposure
         try:
+            device = profile.get_device()
+            self.identity = dict(camera_serial=device.get_info(rs.camera_info.serial_number),
+                firmware=device.get_info(rs.camera_info.firmware_version),
+                sdk_version=getattr(rs, '__version__', 'unknown'))
             policy = load_capture_policy()
             if (self.identity != policy_identity(policy)
                     or fps != policy['fps'] or not 1 <= exposure <= 300):
@@ -43,6 +46,14 @@ class CaptureClock:
         except (RuntimeError,ValueError) as exc:
             self.error=str(exc)
             self.restore()
+
+    def diagnostics(self, color, depth):
+        # In particular on Windows, these raw numbers are useful for a later
+        # timing acceptance but are not an alternative to a verified model.
+        return dict(platform=sys.platform, identity=dict(self.identity),
+                    model_error=self.error, diagnostic_only=True,
+                    color=frame_diagnostics(self.rs, color),
+                    depth=frame_diagnostics(self.rs, depth))
 
     def restore(self):
         errors=[]

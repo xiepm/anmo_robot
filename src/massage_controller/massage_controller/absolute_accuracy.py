@@ -92,8 +92,8 @@ def main():
     parser.add_argument('--measurements',required=True);parser.add_argument('--calibration',required=True)
     parser.add_argument('--output',required=True);args=parser.parse_args()
     raw=Path(args.calibration).read_bytes();source=Path(args.measurements)
-    report=evaluate(json.loads(source.read_text()),json.loads(raw),hashlib.sha256(raw).hexdigest(),source.parent)
-    Path(args.output).write_text(json.dumps(report,ensure_ascii=False,indent=2,allow_nan=False)+'\n')
+    report=evaluate(json.loads(source.read_text(encoding='utf-8-sig')),json.loads(raw),hashlib.sha256(raw).hexdigest(),source.parent)
+    Path(args.output).write_text(json.dumps(report,ensure_ascii=False,indent=2,allow_nan=False)+'\n', encoding='utf-8')
     print(json.dumps(report,ensure_ascii=False,allow_nan=False))
     if report['blockers']: raise SystemExit(2)
 

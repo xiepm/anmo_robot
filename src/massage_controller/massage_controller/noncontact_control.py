@@ -91,7 +91,7 @@ class NoncontactControl:
         self.authorization_revoked=True
         try:
             path=authorization_path(self.profile_path)
-            approval=json.loads(path.read_text())
+            approval=json.loads(path.read_text(encoding='utf-8-sig'))
             binding=approval.get('binding') if isinstance(approval,dict) else None
             if isinstance(binding,dict) and binding.get('revision')==revision:
                 path.unlink(missing_ok=True)

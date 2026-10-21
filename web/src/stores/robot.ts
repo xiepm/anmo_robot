@@ -5,6 +5,7 @@
  */
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
+import { robotWebSocketUrl } from '@/utils/endpoints'
 import type {
   Command,
   ControlCommand,
@@ -13,7 +14,7 @@ import type {
   RobotStatus,
 } from '@/types/robot'
 
-const WS_URL = import.meta.env.VITE_ROBOT_WS_URL || 'ws://127.0.0.1:8765'
+const WS_URL = robotWebSocketUrl(import.meta.env.VITE_ROBOT_WS_URL)
 /** GET_STATUS 周期，兼作 UI 存活通知 */
 const POLL_INTERVAL_MS = 1000
 /** 状态新鲜度巡查周期 */

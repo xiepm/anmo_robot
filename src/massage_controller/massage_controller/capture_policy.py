@@ -6,6 +6,7 @@ SDK, frame-rate or exposure-unit assumptions implemented by capture_timing.
 import json
 import os
 from pathlib import Path
+import sys
 
 DEFAULT_PATH = Path(__file__).resolve().parents[3] / 'config/commissioning/capture_timing.local.json'
 EXPOSURE_MODEL = 'D435I_MANUAL_RGB_INTERVAL_V1'
@@ -15,9 +16,11 @@ SUPPORTED = dict(model=EXPOSURE_MODEL, firmware='5.15.1.55', sdk_version='2.58.4
 
 
 def load_capture_policy(path=None):
+    if not sys.platform.startswith('linux'):
+        raise ValueError('当前曝光时间模型仅在 Linux UVC 核对；Windows 曝光元数据尚未验证，只允许预览')
     selected = Path(path or os.environ.get('REHAB_CAPTURE_TIMING') or DEFAULT_PATH)
     try:
-        policy = json.loads(selected.read_text())
+        policy = json.loads(selected.read_text(encoding='utf-8-sig'))
     except (OSError, ValueError) as exc:
         raise ValueError('缺少或无法读取本机曝光配置，请配置 capture_timing.local.json') from exc
     if (not isinstance(policy, dict) or type(policy.get('version')) is not int or policy['version'] != 1

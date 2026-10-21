@@ -8,11 +8,17 @@ import ts from 'typescript'
 const transpile = source => ts.transpileModule(source, {
   compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS },
 }).outputText
-const componentSource = (await readFile(new URL('../src/components/service/LiveAcupointPreview.vue', import.meta.url), 'utf8'))
-  .replace('import.meta.env.VITE_VISION_PREVIEW_URL', 'undefined')
-const componentCode = transpile(compileScript(parse(componentSource).descriptor, { id: 'preview-recovery-test' }).content)
+const componentSource = await readFile(new URL('../src/components/service/LiveAcupointPreview.vue', import.meta.url), 'utf8')
+function compileComponent(demoMode) {
+  const source = componentSource.replace('import.meta.env.VITE_VISION_PREVIEW_URL', 'undefined')
+    .replace('import.meta.env.VITE_DEMO_MODE', JSON.stringify(demoMode ? 'true' : 'false'))
+  return transpile(compileScript(parse(source).descriptor, { id: 'preview-recovery-test' }).content)
+}
+const componentCodes = [compileComponent(false), compileComponent(true)]
 const abortableModule = { exports: {} }
 new Function('module', 'exports', transpile(await readFile(new URL('../src/utils/abortable.ts', import.meta.url), 'utf8')))(abortableModule, abortableModule.exports)
+const endpointsModule = { exports: {} }
+new Function('module', 'exports', transpile(await readFile(new URL('../src/utils/endpoints.ts', import.meta.url), 'utf8')))(endpointsModule, endpointsModule.exports)
 
 function deferred() {
   let resolve, reject
@@ -25,7 +31,7 @@ async function flush() {
 
 // Run the real component setup with an in-memory clock, HTTP responses and JPEG
 // decoder. No browser, localhost service, camera or robot is contacted.
-function fixture() {
+function fixture(demoMode = false) {
   let now = 0, timerId = 0, sequence = 0, urlId = 0
   const timers = new Map(), listeners = new Set(), activeUrls = new Set()
   const calls = [], createdUrls = [], revokedUrls = [], images = []
@@ -76,6 +82,7 @@ function fixture() {
     const modules = {
       vue: { ...vue, onMounted: callback => mounts.push(callback), onBeforeUnmount: callback => unmounts.push(callback) },
       '@/utils/abortable': abortableModule.exports,
+      '@/utils/endpoints': endpointsModule.exports,
       '@/components/common/AppIcon.vue': { default: {} },
     }
     const module = { exports: {} }
@@ -84,7 +91,7 @@ function fixture() {
       return modules[name]
     }
     new Function('require', 'module', 'exports', 'fetch', 'Image', 'URL', 'document',
-      'setTimeout', 'clearTimeout', 'performance', componentCode)(require, module, module.exports,
+      'setTimeout', 'clearTimeout', 'performance', componentCodes[Number(demoMode)])(require, module, module.exports,
       fetch, Image, URL, document, setTimeout, clearTimeout, { now: () => now })
     const page = module.exports.default.setup({}, { expose() {} })
     return {
@@ -113,6 +120,23 @@ function fixture() {
     },
   }
 }
+
+test('Docker demo explicitly explains synthetic preview without requests, timers or fake video', async () => {
+  const f = fixture(true), component = f.instance()
+  await component.mount()
+  await f.advance(10000)
+  await f.visibility(true)
+  await f.visibility(false)
+  assert.equal(component.page.demoMode, true)
+  assert.equal(component.page.ready.value, false)
+  assert.equal(component.page.connecting.value, false)
+  assert.equal(component.page.message.value, '模拟演示，不提供真实相机画面')
+  assert.equal(f.calls.length, 0)
+  assert.equal(f.timers.size, 0)
+  assert.equal(f.listeners.size, 0)
+  assert.equal(f.createdUrls.length, 0)
+  await component.unmount()
+})
 
 test('camera unavailable and HTTP errors clear the old frame and recover without a page reload', async () => {
   const f = fixture(), component = f.instance()

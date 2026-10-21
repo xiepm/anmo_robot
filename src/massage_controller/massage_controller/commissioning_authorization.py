@@ -94,7 +94,7 @@ def validate_authorization(approval, bundle, now=None):
 def read_authorization(profile_path, bundle, now=None):
     path = authorization_path(profile_path)
     if not path.exists(): return None
-    approval = json.loads(path.read_text())
+    approval = json.loads(path.read_text(encoding='utf-8-sig'))
     expected = binding(bundle)
     saved = approval.get('binding') if isinstance(approval, dict) else None
     # A sidecar for a previous capture is not authorization for this route.

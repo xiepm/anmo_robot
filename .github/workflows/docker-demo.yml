@@ -1,0 +1,70 @@
+name: Windows Docker demo
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docker/**'
+      - 'windows/**'
+      - 'compose.yaml'
+      - '.dockerignore'
+      - '.github/workflows/docker-demo.yml'
+      - 'web/**'
+      - 'src/massage_controller/**'
+      - 'config/rehab_protocol/**'
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the simulation image
+        run: docker compose build
+      - name: Start and verify readiness
+        run: |
+          docker compose up -d --wait --wait-timeout 90
+          curl --fail http://127.0.0.1:5173/healthz
+          curl --fail http://127.0.0.1:5173/confirm > /dev/null
+          docker compose exec -T demo python /app/docker/healthcheck.py
+          docker compose exec -T demo python /app/docker/smoke.py
+      - name: Collect logs and shut down
+        if: always()
+        run: |
+          docker compose logs --no-color
+          docker compose down
+      - name: Export a Windows offline demo bundle
+        if: github.event_name != 'pull_request'
+        run: |
+          mkdir -p bundle/windows bundle/docs
+          docker save anmo-robot-demo:local | gzip > bundle/anmo-robot-demo.tar.gz
+          cp windows/Docker-Demo.cmd windows/Docker-Demo.ps1 bundle/windows/
+          cp compose.yaml bundle/
+          cp docs/WINDOWS.md bundle/docs/
+          cp LICENSE THIRD_PARTY_NOTICES.md bundle/
+          python3 docker/make_offline_bundle.py bundle/compose.yaml
+      - uses: actions/upload-artifact@v4
+        if: github.event_name != 'pull_request'
+        with:
+          name: anmo-robot-windows-docker
+          path: bundle/
+          retention-days: 30
+  windows-script-check:
+    runs-on: windows-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse Windows PowerShell launchers
+        shell: powershell
+        run: |
+          Get-ChildItem windows/*.ps1 | ForEach-Object {
+            $tokens = $null
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile($_.FullName, [ref]$tokens, [ref]$errors) | Out-Null
+            if ($errors.Count) { throw ($errors | Out-String) }
+          }
+      - name: Exercise first-run and offline launchers without Docker
+        shell: powershell
+        run: ./docker/tests/test_docker_launcher.ps1

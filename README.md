@@ -4,10 +4,26 @@
 
 当前实机流程面向**假人／工装的无接触联调**。项目没有完成真人接触、恒力按摩或医疗疗效验证；界面的方案名称和参数不等于这些能力已经实现。
 
+## Windows 直接连接设备
+
+已加入 Windows 原生安装、启动和相机诊断入口。下载包后依次使用 `windows/Install-Native.cmd`、准备本机 SDK/标定配置、运行 `windows/Start-Native.cmd`。预构建包不需要 Node.js、Docker、WSL 或 ROS；首次安装会准备 Python 与依赖。
+
+**这是原生适配/验证包。Windows 曝光时间模型和真实设备路线仍待现场验证，当前不能宣称已开箱执行机械臂。** 下载入口、所需配置和剩余验证见 [Windows 原生使用说明](docs/WINDOWS_NATIVE.md)。
+
+## Windows 一键体验
+
+安装并启动 Docker Desktop（WSL 2／Linux containers），下载本仓库 ZIP 并解压，双击 `windows/Docker-Demo.cmd`。首次会自动构建镜像；就绪后打开 `http://127.0.0.1:5173/`。Windows 不需要另外安装 Python、Node、ROS 或模型。此入口固定为**模拟演示**，没有真实相机和机械臂连接。
+
+停止：`windows\Docker-Demo.cmd stop`。端口被占用时：`windows\Docker-Demo.cmd start -Port 5174`。Linux/macOS 同样可以运行 `docker compose up -d --build --wait`。
+
+需要使用已有实机时，Windows 可通过 `windows/Connect-Device.cmd` 连接现有 Linux 设备机；详见 [Windows 使用说明](docs/WINDOWS.md)。Docker 模拟版不能通过添加 USB 映射直接变成实机版。已有设备机的日常启动保持不变。
+
 ## 从哪里开始
 
 | 你要做的事 | 文档 |
 | --- | --- |
+| Windows 直接接相机和机械臂 | [Windows 原生安装与验证](docs/WINDOWS_NATIVE.md) |
+| Windows Docker 体验与真实设备访问 | [Windows 使用说明](docs/WINDOWS.md) |
 | 新电脑安装、依赖与环境配置 | [安装说明](docs/INSTALLATION.md) |
 | 开机启动、扫描、调整、执行、返回起点、排错 | [操作说明](docs/OPERATIONS.md) |
 | 理解三进程、数据流、模块和坐标版本 | [项目架构](docs/ARCHITECTURE.md) |

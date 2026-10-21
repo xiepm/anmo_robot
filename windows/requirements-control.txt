@@ -1,0 +1,3 @@
+# Native Windows control environment (CPython 3.12 x64).
+# Keep this separate from vision: control is tested with websockets 12.0.
+-r ../src/massage_controller/requirements-standalone.txt

@@ -2,16 +2,19 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import AppIcon from '@/components/common/AppIcon.vue'
 import { abortable } from '@/utils/abortable'
+import { visionResourceUrl } from '@/utils/endpoints'
 
-const endpoint = import.meta.env.VITE_VISION_PREVIEW_URL || 'http://127.0.0.1:8767/frame.jpg'
+const demoMode = import.meta.env.VITE_DEMO_MODE === 'true'
+const endpoint = visionResourceUrl(import.meta.env.VITE_VISION_PREVIEW_URL).href
 const imageUrl = ref('')
 const ready = ref(false)
-const connecting = ref(true)
+const connecting = ref(!demoMode)
 const failureReason = ref('')
 const expanded = ref(false)
 const expandButton = ref<HTMLButtonElement>()
 const closeButton = ref<HTMLButtonElement>()
-const message = computed(() => connecting.value ? '正在连接穴位实时画面…' : failureReason.value || '视觉预览未连接或画面已过期')
+const message = computed(() => demoMode ? '模拟演示，不提供真实相机画面'
+  : connecting.value ? '正在连接穴位实时画面…' : failureReason.value || '视觉预览未连接或画面已过期')
 let disposed = false
 let timer: ReturnType<typeof setTimeout> | undefined
 let request: AbortController | undefined
@@ -35,7 +38,7 @@ function clearImage() {
   imageUrl.value = ''
 }
 async function refresh() {
-  if (disposed || document.hidden) return
+  if (demoMode || disposed || document.hidden) return
   clearTimeout(timer)
   const epoch = ++refreshEpoch
   request?.abort()
@@ -118,7 +121,7 @@ function cancelRefresh() {
   request = undefined
 }
 function visibilityChanged() {
-  if (disposed) return
+  if (demoMode || disposed) return
   if (document.hidden) {
     cancelRefresh()
     clearImage()
@@ -129,6 +132,7 @@ function visibilityChanged() {
   }
 }
 onMounted(() => {
+  if (demoMode) return
   document.addEventListener('visibilitychange', visibilityChanged)
   visibilityChanged()
 })
@@ -143,8 +147,8 @@ onBeforeUnmount(() => {
 <template>
   <div class="live-preview" :class="{ 'is-live': ready }">
     <div class="preview-topbar">
-      <span class="preview-title"><AppIcon name="camera" :size="17" />穴位实时定位</span>
-      <span class="live-badge" :class="{ online: ready }">{{ ready ? '实时画面' : '等待画面' }}</span>
+      <span class="preview-title"><AppIcon name="camera" :size="17" />{{ demoMode ? '模拟定位演示' : '穴位实时定位' }}</span>
+      <span class="live-badge" :class="{ online: ready }">{{ demoMode ? '模拟模式' : ready ? '实时画面' : '等待画面' }}</span>
       <button ref="expandButton" type="button" class="expand-button" :disabled="!ready" @click="openPreview">放大画面</button>
     </div>
     <div class="preview-content">
@@ -152,10 +156,10 @@ onBeforeUnmount(() => {
       <div v-else class="preview-empty" role="status">
         <AppIcon name="camera" :size="38" color="var(--brand)" />
         <strong>{{ message }}</strong>
-        <p>正在自动重连，摄像头重新接入后会恢复画面。</p>
+        <p>{{ demoMode ? '可点击“开始扫描”体验模拟点位与后续流程；不会连接摄像头或机械臂。' : '正在自动重连，摄像头重新接入后会恢复画面。' }}</p>
       </div>
     </div>
-    <div class="preview-caption"><span>请保持身体居中 · 不保存影像</span><span>比例定位与坐标仅供预览</span></div>
+    <div class="preview-caption"><span>{{ demoMode ? '模拟数据 · 仅用于流程体验' : '请保持身体居中 · 不保存影像' }}</span><span>{{ demoMode ? '不代表真实坐标或路线可达性' : '比例定位与坐标仅供预览' }}</span></div>
     <Teleport to="#heacon-app-canvas">
     <div v-if="expanded" class="preview-dialog" role="dialog" aria-modal="true" aria-label="穴位实时画面" @keydown.esc.stop.prevent="closePreview" @keydown.tab.prevent="closeButton?.focus()" @click.self="closePreview">
       <div class="dialog-card"><button ref="closeButton" type="button" class="dialog-close" @click="closePreview">关闭放大画面</button>

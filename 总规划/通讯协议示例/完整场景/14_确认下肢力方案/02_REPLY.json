@@ -1,0 +1,28 @@
+{
+  "type": "REPLY",
+  "cmd": "SET_PLAN",
+  "ok": true,
+  "message": "参数已保存",
+  "data": {
+    "region": "LOWER_LIMB",
+    "points": [
+      {
+        "name": "足三里",
+        "side": "LEFT"
+      },
+      {
+        "name": "三阴交",
+        "side": "LEFT"
+      }
+    ],
+    "total_time_s": 60,
+    "energy": {
+      "type": "FORCE",
+      "value": 15,
+      "unit": "N"
+    },
+    "dwell_mode": "STATIC",
+    "transition_mode": "LIFT_MOVE_APPROACH",
+    "time_per_point_s": 30
+  }
+}

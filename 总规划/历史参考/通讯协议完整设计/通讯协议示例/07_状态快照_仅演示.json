@@ -1,0 +1,67 @@
+{
+  "protocol_version": "1.0",
+  "message_type": "snapshot",
+  "controller_epoch": "boot-20261008-001",
+  "event_id": 140,
+  "state_revision": 51,
+  "session_id": "srv-demo-001",
+  "data": {
+    "mode": "SIMULATION",
+    "device_state": "READY",
+    "workflow_state": "RUNNING",
+    "phase": "DWELL",
+    "plan_revision": 3,
+    "parameter_revision": 3,
+    "registration_id": "demo-reg-1",
+    "point_id": "p-dazhui",
+    "point_index": 0,
+    "cycle_index": 0,
+    "elapsed_active_ms": 120000,
+    "remaining_active_ms": 1680000,
+    "point_elapsed_active_ms": 120000,
+    "elapsed_wall_ms": 145000,
+    "progress_percent": 6.6667,
+    "measurements": {
+      "skin_temperature_c": {
+        "value": 46.8,
+        "valid": true,
+        "age_ms": 50,
+        "source": "SIMULATOR"
+      },
+      "tool_skin_gap_mm": {
+        "value": 30.2,
+        "valid": true,
+        "age_ms": 40,
+        "source": "SIMULATOR"
+      },
+      "normal_force_n": {
+        "value": null,
+        "valid": false,
+        "age_ms": null,
+        "reason": "NOT_APPLICABLE"
+      }
+    },
+    "robot": {
+      "connected": true,
+      "enabled": true,
+      "moving": true,
+      "estop": false,
+      "fault_code": 0
+    },
+    "tool": {
+      "id": "demo-moxa-head",
+      "output_state": "ACTIVE",
+      "residual_heat_state": "PRESENT"
+    },
+    "retreat": {
+      "status": "NOT_REQUESTED",
+      "safe_distance_confirmed": false
+    },
+    "active_faults": [],
+    "allowed_commands": [
+      "session.pause",
+      "session.stop",
+      "session.update_parameters"
+    ]
+  }
+}

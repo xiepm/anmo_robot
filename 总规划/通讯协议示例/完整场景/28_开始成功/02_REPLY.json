@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": "START",
+  "ok": true,
+  "message": "开始请求已受理",
+  "data": {}
+}

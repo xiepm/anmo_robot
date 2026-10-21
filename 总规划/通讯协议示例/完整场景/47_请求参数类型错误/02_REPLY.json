@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": "START",
+  "ok": false,
+  "message": "data必须为空对象",
+  "data": {}
+}

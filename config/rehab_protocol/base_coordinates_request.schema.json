@@ -1,0 +1,236 @@
+{
+  "type": "object",
+  "properties": {
+    "cmd": {
+      "const": "PROJECT_POINTS"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "frame": {
+          "const": "camera_color_optical_frame"
+        },
+        "camera_serial": {
+          "type": "string",
+          "minLength": 1
+        },
+        "host_boot_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "frame_number": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "frame_received_monotonic_s": {
+          "type": "number",
+          "minimum": 0
+        },
+        "points": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "side": {
+                "enum": [
+                  "LEFT",
+                  "RIGHT",
+                  "MIDLINE"
+                ]
+              },
+              "camera_point_mm": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "coordinate_valid": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "name",
+              "side",
+              "camera_point_mm",
+              "coordinate_valid"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 100
+        },
+        "exposure_clock": {
+          "type": "object",
+          "properties": {
+            "host_monotonic_s": {
+              "type": "number",
+              "minimum": 0
+            },
+            "host_unix_s": {
+              "type": "number",
+              "minimum": 0
+            },
+            "clock_read_width_s": {
+              "type": "number",
+              "minimum": 0
+            },
+            "color": {
+              "type": "object",
+              "properties": {
+                "domain": {
+                  "const": "global_time"
+                },
+                "global_timestamp_ms": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "frame_timestamp_us": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "sensor_timestamp_us": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "actual_exposure_us": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "frame_number": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "exposure_raw": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "exposure_unit_us": {
+                  "const": 100
+                },
+                "auto_exposure": {
+                  "enum": [
+                    0,
+                    1
+                  ]
+                }
+              },
+              "required": [
+                "domain",
+                "global_timestamp_ms",
+                "frame_timestamp_us",
+                "sensor_timestamp_us",
+                "actual_exposure_us",
+                "frame_number",
+                "exposure_raw",
+                "exposure_unit_us",
+                "auto_exposure"
+              ],
+              "additionalProperties": false
+            },
+            "depth": {
+              "type": "object",
+              "properties": {
+                "domain": {
+                  "const": "global_time"
+                },
+                "global_timestamp_ms": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "frame_timestamp_us": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "sensor_timestamp_us": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "actual_exposure_us": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "frame_number": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "exposure_raw": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "exposure_unit_us": {
+                  "const": 1
+                },
+                "auto_exposure": {
+                  "enum": [
+                    0,
+                    1
+                  ]
+                }
+              },
+              "required": [
+                "domain",
+                "global_timestamp_ms",
+                "frame_timestamp_us",
+                "sensor_timestamp_us",
+                "actual_exposure_us",
+                "frame_number",
+                "exposure_raw",
+                "exposure_unit_us",
+                "auto_exposure"
+              ],
+              "additionalProperties": false
+            },
+            "model": {
+              "const": "D435I_MANUAL_RGB_INTERVAL_V1"
+            },
+            "camera_serial": {
+              "type": "string"
+            },
+            "firmware": {
+              "type": "string"
+            },
+            "sdk_version": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "host_monotonic_s",
+            "host_unix_s",
+            "clock_read_width_s",
+            "color",
+            "depth",
+            "model",
+            "camera_serial",
+            "firmware",
+            "sdk_version"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "frame",
+        "camera_serial",
+        "host_boot_id",
+        "frame_number",
+        "frame_received_monotonic_s",
+        "points"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "cmd",
+    "data"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

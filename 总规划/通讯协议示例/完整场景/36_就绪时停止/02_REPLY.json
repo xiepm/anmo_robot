@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": "STOP",
+  "ok": true,
+  "message": "待执行方案已清除",
+  "data": {}
+}

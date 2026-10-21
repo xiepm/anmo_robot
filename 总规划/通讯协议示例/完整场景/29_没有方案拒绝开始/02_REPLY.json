@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": "START",
+  "ok": false,
+  "message": "没有已确认方案，请先确认参数",
+  "data": {}
+}

@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": "SCAN",
+  "ok": false,
+  "message": "region必须为BACK、UPPER_LIMB或LOWER_LIMB",
+  "data": {}
+}

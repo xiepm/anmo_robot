@@ -1,0 +1,25 @@
+{
+  "type": "STATUS",
+  "data": {
+    "mode": "SIMULATION",
+    "robot_connected": true,
+    "robot_feedback_valid": true,
+    "state": "IDLE",
+    "step": "NONE",
+    "region": null,
+    "positioning_valid": false,
+    "available_points": [],
+    "current_point": null,
+    "remaining_time_s": 0,
+    "actual_energy": {
+      "type": null,
+      "value": null,
+      "unit": null,
+      "valid": false
+    },
+    "actual_gap_mm": null,
+    "gap_valid": false,
+    "result": "NONE",
+    "error": ""
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": "SCAN",
+  "ok": false,
+  "message": "视觉定位未接入",
+  "data": {}
+}

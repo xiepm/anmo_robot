@@ -1,0 +1,18 @@
+{
+  "protocol_version": "1.0",
+  "message_type": "command",
+  "request_id": "req-start-0001",
+  "client_id": "hmi-main",
+  "controller_epoch": "boot-20261008-001",
+  "lease_id": "lease-001",
+  "session_id": "srv-demo-001",
+  "command": "session.start",
+  "expected_state_revision": 42,
+  "sent_at": "2026-10-08T10:00:00+08:00",
+  "ttl_ms": 2000,
+  "payload": {
+    "plan_token": "plan-token-003",
+    "checklist_token": "check-token-003",
+    "hold_ms": 2100
+  }
+}

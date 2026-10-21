@@ -1,0 +1,29 @@
+{
+  "cmd": "SET_PLAN",
+  "data": {
+    "region": "BACK",
+    "points": [
+      {
+        "name": "大椎",
+        "side": "MIDLINE"
+      },
+      {
+        "name": "肩井",
+        "side": "MIDLINE"
+      },
+      {
+        "name": "肩井",
+        "side": "RIGHT"
+      }
+    ],
+    "total_time_s": 60,
+    "energy": {
+      "type": "TEMPERATURE",
+      "value": 47,
+      "unit": "C"
+    },
+    "dwell_mode": "STATIC",
+    "transition_mode": "LIFT_MOVE_APPROACH",
+    "gap_mm": 30
+  }
+}

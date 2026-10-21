@@ -1,0 +1,196 @@
+{
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "cmd": {
+          "enum": [
+            "LOCATE"
+          ]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "region": {
+              "enum": [
+                "BACK",
+                "UPPER_LIMB",
+                "LOWER_LIMB"
+              ]
+            },
+            "view": {
+              "enum": [
+                "front",
+                "back"
+              ]
+            }
+          },
+          "required": [
+            "region",
+            "view"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "cmd",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "cmd": {
+          "enum": [
+            "CANCEL"
+          ]
+        },
+        "data": {
+          "type": "object",
+          "properties": {},
+          "required": [],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "cmd",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "cmd": {
+          "const": "REFINE_POINTS"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "revision": {
+              "type": "string",
+              "pattern": "^[a-f0-9-]{36}$"
+            },
+            "frame_number": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "received_monotonic_s": {
+              "type": "number",
+              "minimum": 0
+            },
+            "points": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80
+                  },
+                  "side": {
+                    "enum": [
+                      "LEFT",
+                      "RIGHT",
+                      "MIDLINE"
+                    ]
+                  },
+                  "x": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "y": {
+                    "type": "number",
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "name",
+                  "side",
+                  "x",
+                  "y"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1,
+              "maxItems": 100
+            },
+            "scene_context": {
+              "type": "object",
+              "properties": {
+                "revision": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9-]{36}$"
+                },
+                "frame_number": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "received_monotonic_s": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "calibration_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "T_base_camera": {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "items": {
+                    "type": "array",
+                    "minItems": 4,
+                    "maxItems": 4,
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "start_flange_mm": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 3,
+                  "maxItems": 3
+                },
+                "corridor_radius_mm": {
+                  "const": 50
+                },
+                "cell_size_mm": {
+                  "const": 10
+                }
+              },
+              "required": [
+                "revision",
+                "frame_number",
+                "received_monotonic_s",
+                "calibration_sha256",
+                "T_base_camera",
+                "start_flange_mm",
+                "corridor_radius_mm",
+                "cell_size_mm"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "revision",
+            "frame_number",
+            "received_monotonic_s",
+            "points"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "cmd",
+        "data"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

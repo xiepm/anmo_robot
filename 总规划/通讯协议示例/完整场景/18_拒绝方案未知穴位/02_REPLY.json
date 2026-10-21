@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": "SET_PLAN",
+  "ok": false,
+  "message": "穴位不在当前部位可用列表中",
+  "data": {}
+}

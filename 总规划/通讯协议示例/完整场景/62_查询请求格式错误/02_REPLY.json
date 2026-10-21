@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": "GET_STATUS",
+  "ok": false,
+  "message": "GET_STATUS的data必须为空对象",
+  "data": {}
+}

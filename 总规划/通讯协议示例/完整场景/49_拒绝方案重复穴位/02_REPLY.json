@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": "SET_PLAN",
+  "ok": false,
+  "message": "同一名称和侧别不能重复",
+  "data": {}
+}

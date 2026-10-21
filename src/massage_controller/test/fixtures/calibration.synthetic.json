@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "fixture_only": true,
+  "status": "solved_and_holdout_evaluated",
+  "reference_frame": "virtual_flange_with_joint6_zero",
+  "units": "m",
+  "camera_serial": "SYNTHETIC-TEST-CAMERA",
+  "T_reference_camera": [
+    [0, -1, 0, 0.1],
+    [1, 0, 0, 0.2],
+    [0, 0, 1, 0.3],
+    [0, 0, 0, 1]
+  ],
+  "suitability": {
+    "coordinate_preview": true,
+    "robot_motion_approved": false,
+    "absolute_base_accuracy_verified": false
+  }
+}

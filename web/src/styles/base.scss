@@ -1,0 +1,194 @@
+/* 全局基础样式：重置、面板、按钮与排版 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+html,
+body {
+  overflow: hidden;
+}
+
+body {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  color: var(--ink);
+  background: var(--canvas);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* 面板 */
+.panel {
+  background: #fff;
+  border: 1.5px solid rgba(255, 150, 100, 0.38);
+  border-radius: var(--radius-panel);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.95) inset,
+    0 8px 22px rgba(255, 120, 50, 0.07),
+    0 2px 6px rgba(255, 140, 70, 0.04);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.panel:hover {
+  border-color: rgba(255, 106, 26, 0.5);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.95) inset,
+    0 10px 26px rgba(255, 106, 26, 0.12),
+    0 2px 8px rgba(255, 140, 70, 0.05);
+}
+
+/* 标题与描述 */
+.page-title {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.25;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.page-desc {
+  margin: 6px 0 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--brand);
+  text-transform: uppercase;
+}
+
+/* 按钮 */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: var(--radius-btn);
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  background: linear-gradient(
+    135deg,
+    var(--brand-2) 0%,
+    var(--brand) 60%,
+    var(--brand-deep) 100%
+  );
+  box-shadow:
+    0 6px 16px rgba(255, 106, 26, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+.btn-primary:hover {
+  filter: brightness(1.03);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--radius-btn);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--brand);
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid rgba(255, 106, 26, 0.35);
+  box-shadow: 0 4px 12px rgba(255, 120, 40, 0.06);
+}
+
+.btn-secondary:hover {
+  background: var(--brand-soft);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: var(--radius-btn);
+  font-size: 14px;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+}
+
+.btn-ghost:hover {
+  background: #fff;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  filter: none;
+}
+
+/* 图标+文字对齐 */
+.icon-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 暖色滑条 */
+.heacon-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--brand) 0%,
+    var(--brand) var(--range-fill, 0%),
+    #fff3e8 var(--range-fill, 0%),
+    #fff3e8 100%
+  );
+  outline: none;
+  cursor: pointer;
+  border: 1px solid rgba(255, 160, 100, 0.25);
+}
+
+.heacon-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--brand-2), var(--brand));
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(255, 106, 26, 0.35);
+  cursor: pointer;
+}
+
+.heacon-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--brand-2), var(--brand));
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(255, 106, 26, 0.35);
+  cursor: pointer;
+}

@@ -1,0 +1,25 @@
+{
+  "type": "STATUS",
+  "data": {
+    "mode": "SIMULATION",
+    "robot_connected": true,
+    "robot_feedback_valid": true,
+    "state": "ERROR",
+    "step": "NONE",
+    "region": "UPPER_LIMB",
+    "positioning_valid": false,
+    "available_points": [],
+    "current_point": null,
+    "remaining_time_s": 55,
+    "actual_energy": {
+      "type": "FORCE",
+      "value": null,
+      "unit": "N",
+      "valid": false
+    },
+    "actual_gap_mm": null,
+    "gap_valid": false,
+    "result": "FAILED",
+    "error": "力反馈失效，已请求停止"
+  }
+}

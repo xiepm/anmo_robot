@@ -1,0 +1,35 @@
+{
+  "mode": "SIMULATION",
+  "views": {
+    "BACK": "back",
+    "UPPER_LIMB": "front",
+    "LOWER_LIMB": "front"
+  },
+  "limits": {
+    "TEMPERATURE": [
+      40,
+      50
+    ],
+    "FORCE": [
+      1,
+      20
+    ],
+    "gap_mm": [
+      10,
+      100
+    ]
+  },
+  "feedback_stale_s": 0.5,
+  "ui_timeout_s": 3.0,
+  "vision_timeout_s": 3.0,
+  "scan_timeout_s": 30.0,
+  "cancel_timeout_s": 2.0,
+  "stop_timeout_s": 2.0,
+  "motion_timeout_s": 5.0,
+  "motion_delay_s": 0.2,
+  "stop_delay_s": 0.1,
+  "capabilities": [
+    "TEMPERATURE",
+    "FORCE"
+  ]
+}

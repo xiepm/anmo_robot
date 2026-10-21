@@ -1,0 +1,26 @@
+{
+  "scope": "mannequin_or_fixture_noncontact_only",
+  "route_mode": "DIRECT_ABOVE_POINTS",
+  "minimum_surface_clearance_mm": 20,
+  "physical_tool_offset_flange_mm": [
+    0,
+    0,
+    20
+  ],
+  "workspace_base_mm": null,
+  "execution_rxyz_deg": "KEEP_CURRENT",
+  "safe_transfer_height_base_mm": null,
+  "status": "automatic_scene_analysis_pending",
+  "motion_executed_this_session": false,
+  "surface_ceiling_base_mm": null,
+  "path_confirmed": false,
+  "speed_mm_s": 10,
+  "acceleration_mm_s2": 20,
+  "temporary_speed_override": 1.0,
+  "dwell_per_point_s": 2,
+  "extra_clearance_mm": 10,
+  "geometry_source": "FROZEN_DEPTH",
+  "virtual_model_check": "DEFERRED",
+  "return_to_start": true,
+  "unknown_check_mode": "FROZEN_3D_VISIBILITY"
+}

@@ -1,0 +1,395 @@
+{
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "BASE_COORDINATES"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "frame": {
+          "const": "robot_base"
+        },
+        "units": {
+          "const": "mm"
+        },
+        "camera_serial": {
+          "type": "string"
+        },
+        "frame_number": {
+          "type": "integer"
+        },
+        "frame_received_monotonic_s": {
+          "type": "number"
+        },
+        "host_boot_id": {
+          "type": "string"
+        },
+        "generated_monotonic_s": {
+          "type": "number"
+        },
+        "valid_until_monotonic_s": {
+          "type": "number"
+        },
+        "capture_time_valid": {
+          "type": "boolean"
+        },
+        "motion_eligible": {
+          "type": "boolean"
+        },
+        "pairing_method": {
+          "enum": [
+            "stationary_host_receipt_preview",
+            "stationary_global_exposure"
+          ]
+        },
+        "reference_frame": {
+          "const": "virtual_flange_with_joint6_zero"
+        },
+        "calibration_sha256": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "feedback_window": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "before_monotonic_s": {
+                  "type": "number"
+                },
+                "after_monotonic_s": {
+                  "type": "number"
+                },
+                "joint_positions_deg": {
+                  "type": "array",
+                  "minItems": 6,
+                  "maxItems": 6,
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "T_base_reference": {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "items": {
+                    "type": "array",
+                    "minItems": 4,
+                    "maxItems": 4,
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "required": [
+                "before_monotonic_s",
+                "after_monotonic_s",
+                "joint_positions_deg",
+                "T_base_reference"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "points": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "side": {
+                "enum": [
+                  "LEFT",
+                  "RIGHT",
+                  "MIDLINE"
+                ]
+              },
+              "camera_point_mm": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "coordinate_valid": {
+                "type": "boolean"
+              },
+              "base_point_mm": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "base_coordinate_valid": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "name",
+              "side",
+              "camera_point_mm",
+              "coordinate_valid",
+              "base_point_mm",
+              "base_coordinate_valid"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 100
+        },
+        "error": {
+          "type": "string"
+        },
+        "capture_window_monotonic_s": {
+          "type": "object",
+          "properties": {
+            "start": {
+              "type": "number",
+              "minimum": 0
+            },
+            "end": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "start",
+            "end"
+          ],
+          "additionalProperties": false
+        },
+        "capture_time_error": {
+          "type": "string"
+        },
+        "exposure_clock": {
+          "type": "object",
+          "properties": {
+            "host_monotonic_s": {
+              "type": "number",
+              "minimum": 0
+            },
+            "host_unix_s": {
+              "type": "number",
+              "minimum": 0
+            },
+            "clock_read_width_s": {
+              "type": "number",
+              "minimum": 0
+            },
+            "color": {
+              "type": "object",
+              "properties": {
+                "domain": {
+                  "const": "global_time"
+                },
+                "global_timestamp_ms": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "frame_timestamp_us": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "sensor_timestamp_us": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "actual_exposure_us": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "frame_number": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "exposure_raw": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "exposure_unit_us": {
+                  "const": 100
+                },
+                "auto_exposure": {
+                  "enum": [
+                    0,
+                    1
+                  ]
+                }
+              },
+              "required": [
+                "domain",
+                "global_timestamp_ms",
+                "frame_timestamp_us",
+                "sensor_timestamp_us",
+                "actual_exposure_us",
+                "frame_number",
+                "exposure_raw",
+                "exposure_unit_us",
+                "auto_exposure"
+              ],
+              "additionalProperties": false
+            },
+            "depth": {
+              "type": "object",
+              "properties": {
+                "domain": {
+                  "const": "global_time"
+                },
+                "global_timestamp_ms": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "frame_timestamp_us": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "sensor_timestamp_us": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "actual_exposure_us": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "frame_number": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "exposure_raw": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "exposure_unit_us": {
+                  "const": 1
+                },
+                "auto_exposure": {
+                  "enum": [
+                    0,
+                    1
+                  ]
+                }
+              },
+              "required": [
+                "domain",
+                "global_timestamp_ms",
+                "frame_timestamp_us",
+                "sensor_timestamp_us",
+                "actual_exposure_us",
+                "frame_number",
+                "exposure_raw",
+                "exposure_unit_us",
+                "auto_exposure"
+              ],
+              "additionalProperties": false
+            },
+            "model": {
+              "const": "D435I_MANUAL_RGB_INTERVAL_V1"
+            },
+            "camera_serial": {
+              "type": "string"
+            },
+            "firmware": {
+              "type": "string"
+            },
+            "sdk_version": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "host_monotonic_s",
+            "host_unix_s",
+            "clock_read_width_s",
+            "color",
+            "depth",
+            "model",
+            "camera_serial",
+            "firmware",
+            "sdk_version"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "frame",
+        "units",
+        "camera_serial",
+        "frame_number",
+        "frame_received_monotonic_s",
+        "host_boot_id",
+        "generated_monotonic_s",
+        "valid_until_monotonic_s",
+        "capture_time_valid",
+        "motion_eligible",
+        "pairing_method",
+        "reference_frame",
+        "calibration_sha256",
+        "feedback_window",
+        "points",
+        "error"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "capture_time_valid": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "capture_window_monotonic_s"
+            ],
+            "properties": {
+              "pairing_method": {
+                "const": "stationary_global_exposure"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "motion_eligible": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "capture_time_valid": {
+                "const": true
+              },
+              "error": {
+                "const": ""
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "required": [
+    "type",
+    "data"
+  ],
+  "additionalProperties": false
+}

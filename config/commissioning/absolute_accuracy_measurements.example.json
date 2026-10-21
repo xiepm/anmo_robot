@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "calibration_sha256": null,
+  "camera_serial": "",
+  "reference_frame": "virtual_flange_with_joint6_zero",
+  "independent_reference": {
+    "method": null,
+    "evidence_file": null,
+    "uncertainty_mm": null
+  },
+  "acceptance": {"max_error_mm": null},
+  "measurements": [
+    {"id": "P1", "reference_base_mm": null, "camera_point_mm": null, "T_base_reference": null, "capture_evidence_file": null, "capture_time_valid": false},
+    {"id": "P2", "reference_base_mm": null, "camera_point_mm": null, "T_base_reference": null, "capture_evidence_file": null, "capture_time_valid": false},
+    {"id": "P3", "reference_base_mm": null, "camera_point_mm": null, "T_base_reference": null, "capture_evidence_file": null, "capture_time_valid": false},
+    {"id": "P4", "reference_base_mm": null, "camera_point_mm": null, "T_base_reference": null, "capture_evidence_file": null, "capture_time_valid": false},
+    {"id": "P5", "reference_base_mm": null, "camera_point_mm": null, "T_base_reference": null, "capture_evidence_file": null, "capture_time_valid": false}
+  ]
+}

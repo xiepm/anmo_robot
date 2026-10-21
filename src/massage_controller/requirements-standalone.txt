@@ -1,0 +1,4 @@
+# Native standalone controller; ROS is optional and installed separately.
+-r requirements.txt
+numpy>=1.26,<3
+scipy>=1.11,<2

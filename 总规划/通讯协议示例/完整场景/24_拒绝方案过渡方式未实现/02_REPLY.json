@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": "SET_PLAN",
+  "ok": false,
+  "message": "初版仅支持LIFT_MOVE_APPROACH",
+  "data": {}
+}

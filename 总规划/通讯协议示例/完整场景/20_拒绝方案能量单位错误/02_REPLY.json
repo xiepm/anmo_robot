@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": "SET_PLAN",
+  "ok": false,
+  "message": "TEMPERATURE的单位必须为C",
+  "data": {}
+}

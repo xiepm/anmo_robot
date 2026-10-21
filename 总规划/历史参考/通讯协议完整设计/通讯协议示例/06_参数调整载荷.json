@@ -1,0 +1,9 @@
+{
+  "base_parameter_revision": 3,
+  "scope": "CURRENT_AND_REMAINING",
+  "apply_policy": "PAUSE_REVALIDATE",
+  "changes": {
+    "temperature_target_c": 47,
+    "gap_target_mm": 40
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "dwpose-l": {
+    "url": "https://download.openmmlab.com/mmpose/v1/projects/rtmposev1/onnx_sdk/rtmpose-l_simcc-ucoco_dw-ucoco_270e-256x192-4d6dfc62_20230728.zip",
+    "sha256": "370c6d5777f4b496f718468ef718fe7d4d0f9acbeb7bc6757e0ba80dd692b2d1",
+    "bytes": 133879122,
+    "input": [
+      1,
+      3,
+      256,
+      192
+    ]
+  },
+  "rtmw-l": {
+    "url": "https://download.openmmlab.com/mmpose/v1/projects/rtmw/onnx_sdk/rtmw-dw-x-l_simcc-cocktail14_270e-256x192_20231122.zip",
+    "sha256": "9a9bc17c13ff0a1e37507f45a037a21bc410cd08374b0e664c57d0080843aa58",
+    "bytes": 228708578,
+    "input": [
+      1,
+      3,
+      256,
+      192
+    ]
+  }
+}

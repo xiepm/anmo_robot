@@ -1,0 +1,36 @@
+version: 1
+# Commissioning only. No robot enable, reset, homing or motion is issued.
+mode: commissioning_read_only
+camera:
+  model: D435i
+  namespace: /sensors
+  name: d435i
+  serial: ''
+  mount: unconfirmed  # wrist or fixed, after mechanical installation is confirmed
+  depth_profile: 640x480x30
+  color_profile: 640x480x30
+  rgb_topic: /sensors/d435i/color/image_raw
+  depth_topic: /sensors/d435i/aligned_depth_to_color/image_raw
+  info_topic: /sensors/d435i/color/camera_info
+  optical_frame: d435i_color_optical_frame
+  extrinsic_file: ''  # measured parent_frame -> d435i_link; never use the simulator offset
+robot:
+  id: elfin5_l_candidate
+  vendor: huayan
+  model: elfin5_l
+  adapter: pending_vendor_confirmation
+  controller_ip: ''
+  joint_names: [elfin_joint1, elfin_joint2, elfin_joint3, elfin_joint4, elfin_joint5, elfin_joint6]
+  joint_states_topic: /robot/joint_states
+  trajectory_action: /robot/follow_joint_trajectory
+  base_frame: elfin_base_link
+  flange_frame: elfin_end_link
+  tcp_frame: massage_tcp
+  urdf_file: ''
+  observation_joints: []  # measured and checked on this robot; no simulation preset
+io:
+  adapter: unselected
+  state_topic: /hardware/io_state
+  stale_after_s: 0.5
+  # Normal buttons are process requests. Emergency stop must use the cabinet's safety circuit.
+  channels: {start: null, stop: null, reset_request: null, safety_ok_feedback: null}

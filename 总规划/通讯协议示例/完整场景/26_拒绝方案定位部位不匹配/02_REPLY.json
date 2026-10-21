@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": "SET_PLAN",
+  "ok": false,
+  "message": "当前定位部位为BACK，请先定位UPPER_LIMB",
+  "data": {}
+}

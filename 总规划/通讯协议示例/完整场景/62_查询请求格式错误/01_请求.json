@@ -1,0 +1,6 @@
+{
+  "cmd": "GET_STATUS",
+  "data": {
+    "unexpected": true
+  }
+}

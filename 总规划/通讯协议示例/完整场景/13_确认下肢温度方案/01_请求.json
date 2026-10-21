@@ -1,0 +1,25 @@
+{
+  "cmd": "SET_PLAN",
+  "data": {
+    "region": "LOWER_LIMB",
+    "points": [
+      {
+        "name": "足三里",
+        "side": "LEFT"
+      },
+      {
+        "name": "三阴交",
+        "side": "LEFT"
+      }
+    ],
+    "total_time_s": 60,
+    "energy": {
+      "type": "TEMPERATURE",
+      "value": 47,
+      "unit": "C"
+    },
+    "dwell_mode": "STATIC",
+    "transition_mode": "LIFT_MOVE_APPROACH",
+    "gap_mm": 30
+  }
+}

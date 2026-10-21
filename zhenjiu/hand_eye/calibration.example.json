@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "status": "unconfigured",
+  "reference_frame": "virtual_flange_with_joint6_zero",
+  "units": "m",
+  "camera_serial": "",
+  "camera_frame": "camera_color_optical_frame",
+  "intrinsics": null,
+  "T_reference_camera": null,
+  "reference_pose_definition": "Confirm the physical camera mount before defining its reference frame.",
+  "suitability": {
+    "coordinate_preview": false,
+    "robot_motion_approved": false,
+    "absolute_base_accuracy_verified": false
+  },
+  "source_dataset": null,
+  "limits": [
+    "Unconfigured example only. Supply measured calibration from this installation.",
+    "Do not copy test fixtures or calibration from another robot into production."
+  ]
+}

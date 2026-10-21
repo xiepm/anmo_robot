@@ -1,0 +1,17 @@
+{
+  "note": "SIMULATION：仅用于报文/映射/生命周期测试，非人体测量",
+  "frames": [
+    {"region": "BACK", "view": "back", "points": [
+      {"name": "大椎", "side": null, "coordinate_valid": true, "camera_point_mm": [10.0, -20.0, 800.0]},
+      {"name": "命门", "side": null, "coordinate_valid": true, "camera_point_mm": [10.0, 20.0, 800.0]}
+    ]},
+    {"region": "UPPER_LIMB", "view": "front", "points": [
+      {"name": "曲池", "side": "L", "coordinate_valid": true, "camera_point_mm": [120.0, 10.0, 800.0]},
+      {"name": "合谷", "side": "R", "coordinate_valid": true, "camera_point_mm": [-120.0, 10.0, 800.0]}
+    ]},
+    {"region": "LOWER_LIMB", "view": "front", "points": [
+      {"name": "足三里", "side": "L", "coordinate_valid": true, "camera_point_mm": [100.0, 200.0, 900.0]},
+      {"name": "三阴交", "side": "R", "coordinate_valid": false, "camera_point_mm": null}
+    ]}
+  ]
+}

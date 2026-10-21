@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": "STOP",
+  "ok": true,
+  "message": "停止请求已受理",
+  "data": {}
+}

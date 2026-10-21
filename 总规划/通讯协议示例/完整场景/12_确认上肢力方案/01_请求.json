@@ -1,0 +1,24 @@
+{
+  "cmd": "SET_PLAN",
+  "data": {
+    "region": "UPPER_LIMB",
+    "points": [
+      {
+        "name": "曲池",
+        "side": "LEFT"
+      },
+      {
+        "name": "合谷",
+        "side": "LEFT"
+      }
+    ],
+    "total_time_s": 60,
+    "energy": {
+      "type": "FORCE",
+      "value": 15,
+      "unit": "N"
+    },
+    "dwell_mode": "STATIC",
+    "transition_mode": "LIFT_MOVE_APPROACH"
+  }
+}

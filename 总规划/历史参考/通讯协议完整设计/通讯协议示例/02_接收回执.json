@@ -1,0 +1,11 @@
+{
+  "protocol_version": "1.0",
+  "message_type": "ack",
+  "request_id": "req-start-0001",
+  "controller_epoch": "boot-20261008-001",
+  "session_id": "srv-demo-001",
+  "status": "ACCEPTED",
+  "code": "OK",
+  "operation_id": "op-start-001",
+  "state_revision": 43
+}

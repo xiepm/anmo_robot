@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": "SCAN",
+  "ok": false,
+  "message": "缺少region",
+  "data": {}
+}

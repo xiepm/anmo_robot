@@ -1,0 +1,63 @@
+# Rebuildable runtime, Python, Node and ROS artifacts.
+build/
+install/
+log/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+*.egg-info/
+.venv*/
+.runtime/
+node_modules/
+dist/
+dist-ssr/
+*.tsbuildinfo
+
+# Local observations, logs, temporary exports and old working copies.
+reports/
+logs/
+backups/
+/tmp/
+*.log
+*.pid
+.DS_Store
+.idea/
+.vision_worker.lock
+/zhenjiu/acupoint_snapshots/
+
+# Credentials and machine-local environment overrides. The checked-in
+# .env.development files contain only public frontend defaults.
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Vendor SDKs are installed separately; see SDK/README.md.
+/SDK/HUAYAN/
+
+# Download reproducible model artifacts instead of committing large binaries.
+/zhenjiu/models/**/*.onnx
+/zhenjiu/models/*.task
+/zhenjiu/models/**/*.zip
+/zhenjiu/model/*.zip
+
+# Device-specific files stay on the commissioning computer. Publish examples,
+# never a previously approved route or the calibration from another machine.
+/src/massage_controller/config/real_robot.json
+/config/commissioning/waypoints.json
+/config/commissioning/waypoints.preview.json
+/config/commissioning/absolute_accuracy_measurements.json
+/config/commissioning/*.authorization.json
+/config/commissioning/*.local.json
+/zhenjiu/hand_eye/calibration_*.json
+/zhenjiu/hand_eye/calibration.local.json
+/zhenjiu/hand_eye/coordinate_example_*.json
+/zhenjiu/hand_eye/user_workspace_*.json
+/zhenjiu/hand_eye/*.local.json
+/zhenjiu/hand_eye/实测报告_*.md
+/zhenjiu/hand_eye/*.csv
+/zhenjiu/hand_eye/sample_*.json
+/zhenjiu/hand_eye/candidate_*.json

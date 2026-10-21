@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": "START",
+  "ok": false,
+  "message": "急停有效，不能开始",
+  "data": {}
+}

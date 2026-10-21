@@ -1,0 +1,473 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "cmd": {
+          "enum": [
+            "GET_STATUS"
+          ]
+        },
+        "data": {
+          "type": "object",
+          "properties": {},
+          "required": [],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "cmd",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "cmd": {
+          "enum": [
+            "START"
+          ]
+        },
+        "data": {
+          "type": "object",
+          "properties": {},
+          "required": [],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "cmd",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "cmd": {
+          "enum": [
+            "STOP"
+          ]
+        },
+        "data": {
+          "type": "object",
+          "properties": {},
+          "required": [],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "cmd",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "cmd": {
+          "enum": [
+            "SCAN"
+          ]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "region": {
+              "enum": [
+                "BACK",
+                "UPPER_LIMB",
+                "LOWER_LIMB"
+              ]
+            }
+          },
+          "required": [
+            "region"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "cmd",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "cmd": {
+          "enum": [
+            "SET_PLAN"
+          ]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "region": {
+              "enum": [
+                "BACK",
+                "UPPER_LIMB",
+                "LOWER_LIMB"
+              ]
+            },
+            "points": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "side": {
+                    "enum": [
+                      "LEFT",
+                      "RIGHT",
+                      "MIDLINE"
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "side"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1,
+              "maxItems": 100,
+              "uniqueItems": true
+            },
+            "total_time_s": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 86400
+            },
+            "energy": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "enum": [
+                    "TEMPERATURE",
+                    "FORCE"
+                  ]
+                },
+                "value": {
+                  "type": "number"
+                },
+                "unit": {
+                  "enum": [
+                    "C",
+                    "N"
+                  ]
+                }
+              },
+              "required": [
+                "type",
+                "value",
+                "unit"
+              ],
+              "additionalProperties": false
+            },
+            "gap_mm": {
+              "type": "number"
+            },
+            "dwell_mode": {
+              "enum": [
+                "STATIC"
+              ]
+            },
+            "transition_mode": {
+              "enum": [
+                "LIFT_MOVE_APPROACH"
+              ]
+            },
+            "confirmation_revision": {
+              "type": "string",
+              "pattern": "^[a-f0-9-]{36}$"
+            }
+          },
+          "required": [
+            "region",
+            "points",
+            "total_time_s",
+            "energy",
+            "dwell_mode",
+            "transition_mode"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "cmd",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "cmd": {
+          "const": "CONFIRM_POINTS"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "revision": {
+              "type": "string",
+              "pattern": "^[a-f0-9-]{36}$"
+            },
+            "frame_number": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "received_monotonic_s": {
+              "type": "number",
+              "minimum": 0
+            },
+            "points": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80
+                  },
+                  "side": {
+                    "enum": [
+                      "LEFT",
+                      "RIGHT",
+                      "MIDLINE"
+                    ]
+                  },
+                  "x": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "y": {
+                    "type": "number",
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "name",
+                  "side",
+                  "x",
+                  "y"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1,
+              "maxItems": 100
+            }
+          },
+          "required": [
+            "revision",
+            "frame_number",
+            "received_monotonic_s",
+            "points"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "cmd",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "cmd": {
+          "const": "CLEAR_POINTS"
+        },
+        "data": {
+          "type": "object",
+          "properties": {},
+          "required": [],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "cmd",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "cmd": {
+          "const": "AUTHORIZE_NONCONTACT"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "revision": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"
+            },
+            "points": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80
+                  },
+                  "side": {
+                    "enum": [
+                      "LEFT",
+                      "RIGHT",
+                      "MIDLINE"
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "side"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1,
+              "maxItems": 30
+            },
+            "operator_observed_no_obstacles": {
+              "type": "boolean",
+              "const": true
+            },
+            "reuse_existing_calibration": {
+              "type": "boolean",
+              "const": true
+            }
+          },
+          "required": [
+            "revision",
+            "points",
+            "operator_observed_no_obstacles",
+            "reuse_existing_calibration"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "cmd",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "cmd": {
+          "enum": [
+            "PREPARE_NONCONTACT"
+          ]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "revision": {
+              "type": "string",
+              "pattern": "^[a-f0-9-]{36}$"
+            },
+            "points": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80
+                  },
+                  "side": {
+                    "enum": [
+                      "LEFT",
+                      "RIGHT",
+                      "MIDLINE"
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "side"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1,
+              "maxItems": 30
+            }
+          },
+          "required": [
+            "revision",
+            "points"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "cmd",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "cmd": {
+          "enum": [
+            "START_NONCONTACT"
+          ]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "plan_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "plan_sha256"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "cmd",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "cmd": {
+          "enum": [
+            "CHECK_NONCONTACT_STOP"
+          ]
+        },
+        "data": {
+          "type": "object",
+          "properties": {},
+          "required": [],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "cmd",
+        "data"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

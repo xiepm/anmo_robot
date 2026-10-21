@@ -1,0 +1,21 @@
+{
+  "id": "cmd-002",
+  "cmd": "SET_PLAN",
+  "data": {
+    "point_source": "FIXED",
+    "points": [
+      "P1",
+      "P2",
+      "P3"
+    ],
+    "total_time_s": 60,
+    "energy": {
+      "type": "TEMPERATURE",
+      "value": 47,
+      "unit": "C"
+    },
+    "gap_mm": 30,
+    "dwell_mode": "STATIC",
+    "transition_mode": "LIFT_MOVE_APPROACH"
+  }
+}

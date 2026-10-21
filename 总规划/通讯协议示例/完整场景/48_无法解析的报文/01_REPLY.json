@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": null,
+  "ok": false,
+  "message": "报文不是有效JSON或缺少cmd",
+  "data": {}
+}

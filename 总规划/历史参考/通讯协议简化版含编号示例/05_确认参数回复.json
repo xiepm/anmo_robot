@@ -1,0 +1,9 @@
+{
+  "id": "cmd-002",
+  "ok": true,
+  "message": "参数已保存",
+  "data": {
+    "plan_id": "plan-001",
+    "time_per_point_s": 20
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "host": "synthetic-robot.invalid",
+  "port": 10003,
+  "sdk_relative_path": "test-only/no-sdk.py",
+  "poll_interval_s": 0.1,
+  "read_timeout_s": 1.0,
+  "reconnect_interval_s": 1.0,
+  "feedback_stale_s": 0.5,
+  "startup_timeout_s": 8.0,
+  "robot_model": "elfin5_l",
+  "model_confirmed": true,
+  "joint_mapping_verified": true,
+  "joint_names": ["elfin_joint1", "elfin_joint2", "elfin_joint3", "elfin_joint4", "elfin_joint5", "elfin_joint6"],
+  "source_joint_indices": [0, 1, 2, 3, 4, 5],
+  "joint_signs": [1, 1, 1, 1, 1, 1],
+  "joint_offsets_deg": [0, 0, 0, 0, 0, 0]
+}

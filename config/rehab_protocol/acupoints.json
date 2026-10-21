@@ -1,0 +1,139 @@
+{
+  "version": "0.3",
+  "regions": {
+    "BACK": [
+      {
+        "name": "大椎",
+        "sides": [
+          "MIDLINE"
+        ]
+      },
+      {
+        "name": "肩井",
+        "sides": [
+          "LEFT",
+          "RIGHT"
+        ]
+      },
+      {
+        "name": "身柱",
+        "sides": [
+          "MIDLINE"
+        ]
+      },
+      {
+        "name": "肺俞",
+        "sides": [
+          "LEFT",
+          "RIGHT"
+        ]
+      },
+      {
+        "name": "心俞",
+        "sides": [
+          "LEFT",
+          "RIGHT"
+        ]
+      },
+      {
+        "name": "至阳",
+        "sides": [
+          "MIDLINE"
+        ]
+      },
+      {
+        "name": "膈俞",
+        "sides": [
+          "LEFT",
+          "RIGHT"
+        ]
+      },
+      {
+        "name": "肝俞",
+        "sides": [
+          "LEFT",
+          "RIGHT"
+        ]
+      },
+      {
+        "name": "脾俞",
+        "sides": [
+          "LEFT",
+          "RIGHT"
+        ]
+      },
+      {
+        "name": "命门",
+        "sides": [
+          "MIDLINE"
+        ]
+      },
+      {
+        "name": "肾俞",
+        "sides": [
+          "LEFT",
+          "RIGHT"
+        ]
+      },
+      {
+        "name": "大肠俞",
+        "sides": [
+          "LEFT",
+          "RIGHT"
+        ]
+      },
+      {
+        "name": "腰阳关",
+        "sides": [
+          "MIDLINE"
+        ]
+      },
+      {
+        "name": "天宗",
+        "sides": [
+          "LEFT",
+          "RIGHT"
+        ]
+      },
+      {
+        "name": "风池",
+        "sides": [
+          "LEFT",
+          "RIGHT"
+        ]
+      }
+    ],
+    "UPPER_LIMB": [
+      {
+        "name": "曲池",
+        "sides": [
+          "LEFT",
+          "RIGHT"
+        ]
+      },
+      {
+        "name": "合谷",
+        "sides": [
+          "LEFT",
+          "RIGHT"
+        ]
+      }
+    ],
+    "LOWER_LIMB": [
+      {
+        "name": "足三里",
+        "sides": [
+          "LEFT",
+          "RIGHT"
+        ]
+      },
+      {
+        "name": "三阴交",
+        "sides": [
+          "LEFT",
+          "RIGHT"
+        ]
+      }
+    ]
+  }
+}

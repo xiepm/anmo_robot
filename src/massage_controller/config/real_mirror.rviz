@@ -1,0 +1,39 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+Visualization Manager:
+  Class: ""
+  Global Options:
+    Fixed Frame: mirror_world
+    Background Color: 40; 40; 45
+    Frame Rate: 30
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Name: Grid
+      Enabled: true
+      Cell Size: 0.1
+      Plane Cell Count: 30
+    - Class: rviz_default_plugins/RobotModel
+      Name: elfin5_l REAL joint feedback
+      Enabled: true
+      Description Source: Topic
+      Description Topic:
+        Value: /robot_mirror/robot_description
+        Durability Policy: Transient Local
+      Visual Enabled: true
+      Collision Enabled: false
+    - Class: rviz_default_plugins/Marker
+      Name: REAL feedback freshness
+      Enabled: true
+      Marker Topic:
+        Value: /robot_mirror/feedback_status
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Distance: 2.7
+      Focal Point: {X: 0, Y: 0, Z: 0.7}
+      Pitch: 0.3
+      Yaw: 0.6
+Window Geometry:
+  Width: 1100
+  Height: 800

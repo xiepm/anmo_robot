@@ -1,0 +1,37 @@
+{
+  "type": "STATUS",
+  "data": {
+    "mode": "SIMULATION",
+    "robot_connected": true,
+    "robot_feedback_valid": true,
+    "state": "RUNNING",
+    "step": "DWELL",
+    "region": "UPPER_LIMB",
+    "positioning_valid": true,
+    "available_points": [
+      {
+        "name": "曲池",
+        "side": "LEFT"
+      },
+      {
+        "name": "合谷",
+        "side": "LEFT"
+      }
+    ],
+    "current_point": {
+      "name": "曲池",
+      "side": "LEFT"
+    },
+    "remaining_time_s": 55,
+    "actual_energy": {
+      "type": "FORCE",
+      "value": 14.9,
+      "unit": "N",
+      "valid": true
+    },
+    "actual_gap_mm": null,
+    "gap_valid": false,
+    "result": "NONE",
+    "error": ""
+  }
+}

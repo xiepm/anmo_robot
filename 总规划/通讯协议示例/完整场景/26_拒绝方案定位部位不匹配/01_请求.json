@@ -1,0 +1,25 @@
+{
+  "cmd": "SET_PLAN",
+  "data": {
+    "region": "UPPER_LIMB",
+    "points": [
+      {
+        "name": "曲池",
+        "side": "LEFT"
+      },
+      {
+        "name": "合谷",
+        "side": "LEFT"
+      }
+    ],
+    "total_time_s": 60,
+    "energy": {
+      "type": "TEMPERATURE",
+      "value": 47,
+      "unit": "C"
+    },
+    "dwell_mode": "STATIC",
+    "transition_mode": "LIFT_MOVE_APPROACH",
+    "gap_mm": 30
+  }
+}

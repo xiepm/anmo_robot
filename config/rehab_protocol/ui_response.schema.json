@@ -1,0 +1,1326 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": [
+            "STATUS"
+          ]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "enum": [
+                "SIMULATION",
+                "REAL"
+              ]
+            },
+            "robot_connected": {
+              "type": "boolean"
+            },
+            "robot_feedback_valid": {
+              "type": "boolean"
+            },
+            "vision_feedback_valid": {
+              "type": "boolean"
+            },
+            "state": {
+              "enum": [
+                "IDLE",
+                "SCANNING",
+                "READY",
+                "RUNNING",
+                "STOPPING",
+                "ERROR"
+              ]
+            },
+            "step": {
+              "enum": [
+                "NONE",
+                "APPROACH",
+                "DWELL",
+                "RETRACT",
+                "TRANSFER"
+              ]
+            },
+            "region": {
+              "enum": [
+                "BACK",
+                "UPPER_LIMB",
+                "LOWER_LIMB",
+                null
+              ]
+            },
+            "positioning_valid": {
+              "type": "boolean"
+            },
+            "available_points": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "side": {
+                    "enum": [
+                      "LEFT",
+                      "RIGHT",
+                      "MIDLINE"
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "side"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "current_point": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "side": {
+                      "enum": [
+                        "LEFT",
+                        "RIGHT",
+                        "MIDLINE"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "side"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "remaining_time_s": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actual_energy": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "enum": [
+                    "TEMPERATURE",
+                    "FORCE",
+                    null
+                  ]
+                },
+                "value": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "unit": {
+                  "enum": [
+                    "C",
+                    "N",
+                    null
+                  ]
+                },
+                "valid": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "type",
+                "value",
+                "unit",
+                "valid"
+              ],
+              "additionalProperties": false
+            },
+            "actual_gap_mm": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "gap_valid": {
+              "type": "boolean"
+            },
+            "result": {
+              "enum": [
+                "NONE",
+                "COMPLETED",
+                "STOPPED",
+                "FAILED"
+              ]
+            },
+            "error": {
+              "type": "string"
+            },
+            "scan_snapshot": {
+              "type": "object",
+              "properties": {
+                "region": {
+                  "enum": [
+                    "BACK",
+                    "UPPER_LIMB",
+                    "LOWER_LIMB"
+                  ]
+                },
+                "frame_number": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "received_monotonic_s": {
+                  "type": "number"
+                },
+                "available_points": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "side": {
+                        "enum": [
+                          "LEFT",
+                          "RIGHT",
+                          "MIDLINE"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "side"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "execution_eligible": {
+                  "const": false
+                },
+                "execution_blocker": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "region",
+                "frame_number",
+                "received_monotonic_s",
+                "available_points",
+                "execution_eligible",
+                "execution_blocker"
+              ],
+              "additionalProperties": false
+            },
+            "point_confirmation": {
+              "type": "object",
+              "properties": {
+                "revision": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9-]{36}$"
+                },
+                "frame_number": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "received_monotonic_s": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "state": {
+                  "enum": [
+                    "PENDING",
+                    "CONFIRMED",
+                    "FAILED"
+                  ]
+                },
+                "requested_points": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 80
+                      },
+                      "side": {
+                        "enum": [
+                          "LEFT",
+                          "RIGHT",
+                          "MIDLINE"
+                        ]
+                      },
+                      "x": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "y": {
+                        "type": "number",
+                        "minimum": 0
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "side",
+                      "x",
+                      "y"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "minItems": 1,
+                  "maxItems": 100
+                },
+                "points": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 80
+                      },
+                      "side": {
+                        "enum": [
+                          "LEFT",
+                          "RIGHT",
+                          "MIDLINE"
+                        ]
+                      },
+                      "x": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "y": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "camera_point_mm": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        },
+                        "minItems": 3,
+                        "maxItems": 3
+                      },
+                      "base_point_mm": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        },
+                        "minItems": 3,
+                        "maxItems": 3
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "side",
+                      "x",
+                      "y",
+                      "camera_point_mm",
+                      "base_point_mm"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "maxItems": 100
+                },
+                "error": {
+                  "type": "string"
+                },
+                "execution_eligible": {
+                  "const": false
+                }
+              },
+              "required": [
+                "revision",
+                "frame_number",
+                "received_monotonic_s",
+                "state",
+                "requested_points",
+                "points",
+                "error",
+                "execution_eligible"
+              ],
+              "additionalProperties": false
+            },
+            "noncontact": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "NONCONTACT_COMMISSIONING"
+                },
+                "available": {
+                  "type": "boolean"
+                },
+                "blockers": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "active": {
+                  "type": "boolean"
+                },
+                "phase": {
+                  "enum": [
+                    "NONE",
+                    "PREPARING",
+                    "CONNECTING",
+                    "PREFLIGHT",
+                    "READY",
+                    "RUNNING",
+                    "STOPPING",
+                    "COMPLETED",
+                    "STOPPED",
+                    "CANCELLED_BEFORE_MOTION",
+                    "ERROR",
+                    "STOP_UNCONFIRMED"
+                  ]
+                },
+                "revision": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[a-f0-9-]{36}$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "plan_sha256": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{64}$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "stop_confirmed": {
+                  "type": "boolean"
+                },
+                "returning_to_start": {
+                  "type": "boolean"
+                },
+                "returned_to_start": {
+                  "type": "boolean"
+                },
+                "targets": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 80
+                      },
+                      "side": {
+                        "enum": [
+                          "LEFT",
+                          "RIGHT",
+                          "MIDLINE"
+                        ]
+                      },
+                      "surface_base_mm": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        },
+                        "minItems": 3,
+                        "maxItems": 3
+                      },
+                      "tool_tip_base_mm": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        },
+                        "minItems": 3,
+                        "maxItems": 3
+                      },
+                      "flange_base_mm": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        },
+                        "minItems": 3,
+                        "maxItems": 3
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "side",
+                      "surface_base_mm",
+                      "tool_tip_base_mm",
+                      "flange_base_mm"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "maxItems": 30
+                },
+                "error": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                },
+                "scene_analysis": {
+                  "type": "object",
+                  "properties": {
+                    "version": {
+                      "const": 1
+                    },
+                    "source": {
+                      "const": "FROZEN_ALIGNED_DEPTH"
+                    },
+                    "context_sha256": {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{64}$"
+                    },
+                    "revision": {
+                      "type": "string",
+                      "pattern": "^[a-f0-9-]{36}$"
+                    },
+                    "frame_number": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "received_monotonic_s": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "calibration_sha256": {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{64}$"
+                    },
+                    "state": {
+                      "enum": [
+                        "NO_DATA",
+                        "PARTIAL",
+                        "OBSERVED"
+                      ]
+                    },
+                    "cell_size_mm": {
+                      "const": 10
+                    },
+                    "corridor_radius_mm": {
+                      "const": 50
+                    },
+                    "image_pixels": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "valid_depth_pixels": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "corridor_depth_points": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "corridor_cells": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "unknown_cells": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "unknown_cell_examples_base_xy_mm": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        },
+                        "minItems": 2,
+                        "maxItems": 2
+                      },
+                      "maxItems": 100000
+                    },
+                    "observed_bounds_base_mm": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "min": {
+                              "type": "array",
+                              "items": {
+                                "type": "number"
+                              },
+                              "minItems": 3,
+                              "maxItems": 3
+                            },
+                            "max": {
+                              "type": "array",
+                              "items": {
+                                "type": "number"
+                              },
+                              "minItems": 3,
+                              "maxItems": 3
+                            }
+                          },
+                          "required": [
+                            "min",
+                            "max"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "surface_ceiling_base_mm": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "collision_checked": {
+                      "const": false
+                    },
+                    "execution_eligible": {
+                      "const": false
+                    },
+                    "note": {
+                      "type": "string"
+                    },
+                    "workspace_base_mm": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "min": {
+                              "type": "array",
+                              "items": {
+                                "type": "number"
+                              },
+                              "minItems": 3,
+                              "maxItems": 3
+                            },
+                            "max": {
+                              "type": "array",
+                              "items": {
+                                "type": "number"
+                              },
+                              "minItems": 3,
+                              "maxItems": 3
+                            }
+                          },
+                          "required": [
+                            "min",
+                            "max"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "safe_transfer_height_base_mm": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "coverage_diagnostics": {
+                      "type": "object",
+                      "properties": {
+                        "incomplete_quadrant_cells": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "invalid_ray_cells": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "overlapping_cause_cells": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "note": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "incomplete_quadrant_cells",
+                        "invalid_ray_cells",
+                        "overlapping_cause_cells",
+                        "note"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "version",
+                    "source",
+                    "context_sha256",
+                    "revision",
+                    "frame_number",
+                    "received_monotonic_s",
+                    "calibration_sha256",
+                    "state",
+                    "cell_size_mm",
+                    "corridor_radius_mm",
+                    "image_pixels",
+                    "valid_depth_pixels",
+                    "corridor_depth_points",
+                    "corridor_cells",
+                    "unknown_cells",
+                    "unknown_cell_examples_base_xy_mm",
+                    "observed_bounds_base_mm",
+                    "surface_ceiling_base_mm",
+                    "collision_checked",
+                    "execution_eligible",
+                    "note",
+                    "workspace_base_mm",
+                    "safe_transfer_height_base_mm"
+                  ],
+                  "additionalProperties": false
+                },
+                "route_review": {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "enum": [
+                        "CHECKING",
+                        "BLOCKED"
+                      ]
+                    },
+                    "revision": {
+                      "type": "string"
+                    },
+                    "frame_number": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "execution_eligible": {
+                      "const": false
+                    },
+                    "reason": {
+                      "type": "string"
+                    },
+                    "blockers": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "targets": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 80
+                          },
+                          "side": {
+                            "enum": [
+                              "LEFT",
+                              "RIGHT",
+                              "MIDLINE"
+                            ]
+                          },
+                          "surface_base_mm": {
+                            "type": "array",
+                            "items": {
+                              "type": "number"
+                            },
+                            "minItems": 3,
+                            "maxItems": 3
+                          },
+                          "tool_tip_base_mm": {
+                            "type": "array",
+                            "items": {
+                              "type": "number"
+                            },
+                            "minItems": 3,
+                            "maxItems": 3
+                          },
+                          "flange_base_mm": {
+                            "type": "array",
+                            "items": {
+                              "type": "number"
+                            },
+                            "minItems": 3,
+                            "maxItems": 3
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "side",
+                          "surface_base_mm",
+                          "tool_tip_base_mm",
+                          "flange_base_mm"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "maxItems": 30
+                    },
+                    "waypoint_count": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "sample_count": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "model_position_error_mm": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "model_rotation_error_deg": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "kinematics_checked": {
+                      "type": "boolean"
+                    },
+                    "self_collision_checked": {
+                      "type": "boolean"
+                    },
+                    "observed_collision_checked": {
+                      "type": "boolean"
+                    },
+                    "full_collision_checked": {
+                      "const": false
+                    },
+                    "transfer_height_mm": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "unknown_cells": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "attempts": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "transfer_height_mm": {
+                            "type": "number"
+                          },
+                          "samples": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "error": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "transfer_height_mm",
+                          "samples",
+                          "error"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "model_check_state": {
+                      "enum": [
+                        "NOT_CHECKED",
+                        "DEFERRED",
+                        "CONSISTENT",
+                        "MISMATCH",
+                        "UNAVAILABLE"
+                      ]
+                    },
+                    "model_check_note": {
+                      "type": "string"
+                    },
+                    "unknown_route_clearance": {
+                      "type": "object",
+                      "properties": {
+                        "assessment": {
+                          "enum": [
+                            "INCOMPLETE",
+                            "NO_UNKNOWN_REPORTED",
+                            "CENTERLINE_NEAR_UNKNOWN",
+                            "UNKNOWN_OFF_CENTERLINE"
+                          ]
+                        },
+                        "unknown_cells": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "checked_cells": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "all_unknown_cells_included": {
+                          "type": "boolean"
+                        },
+                        "minimum_xy_distance_lower_bound_mm": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "nearest_cell_base_xy_mm": {
+                          "anyOf": [
+                            {
+                              "type": "null"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "number"
+                              },
+                              "minItems": 2,
+                              "maxItems": 2
+                            }
+                          ]
+                        },
+                        "possibly_intersecting_cells": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "execution_eligible": {
+                          "const": false
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "assessment",
+                        "unknown_cells",
+                        "checked_cells",
+                        "all_unknown_cells_included",
+                        "minimum_xy_distance_lower_bound_mm",
+                        "nearest_cell_base_xy_mm",
+                        "possibly_intersecting_cells",
+                        "execution_eligible"
+                      ]
+                    },
+                    "depth_visibility": {
+                      "type": "object",
+                      "properties": {
+                        "assessment": {
+                          "enum": [
+                            "UNAVAILABLE",
+                            "UNRESOLVED",
+                            "OBSERVED_CLEAR",
+                            "NOT_REQUIRED"
+                          ]
+                        },
+                        "cell_count": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "unresolved_cells": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "checked_intervals": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "minimum_depth_margin_mm": {
+                          "type": [
+                            "number",
+                            "null"
+                          ]
+                        },
+                        "required_depth_margin_mm": {
+                          "const": 10.0
+                        },
+                        "reason": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "assessment",
+                        "cell_count",
+                        "unresolved_cells",
+                        "checked_intervals",
+                        "minimum_depth_margin_mm",
+                        "required_depth_margin_mm",
+                        "reason"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "state",
+                    "revision",
+                    "frame_number",
+                    "execution_eligible",
+                    "reason",
+                    "blockers",
+                    "targets",
+                    "waypoint_count",
+                    "sample_count",
+                    "model_position_error_mm",
+                    "model_rotation_error_deg",
+                    "kinematics_checked",
+                    "self_collision_checked",
+                    "observed_collision_checked",
+                    "full_collision_checked",
+                    "transfer_height_mm",
+                    "unknown_cells",
+                    "attempts"
+                  ],
+                  "additionalProperties": false
+                },
+                "stop_preflight": {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "enum": [
+                        "NONE",
+                        "CHECKING",
+                        "PASSED",
+                        "FAILED"
+                      ]
+                    },
+                    "check_id": {
+                      "type": "string"
+                    },
+                    "stop_command_sent": {
+                      "type": "boolean"
+                    },
+                    "stop_confirmed": {
+                      "type": "boolean"
+                    },
+                    "checked_monotonic_s": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "samples_after_stop": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "reason": {
+                      "type": "string"
+                    },
+                    "execution_eligible": {
+                      "const": false
+                    },
+                    "start_pose": {
+                      "anyOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "number"
+                          },
+                          "minItems": 6,
+                          "maxItems": 6
+                        }
+                      ]
+                    },
+                    "final_pose": {
+                      "anyOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "number"
+                          },
+                          "minItems": 6,
+                          "maxItems": 6
+                        }
+                      ]
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "state",
+                    "check_id",
+                    "stop_command_sent",
+                    "stop_confirmed",
+                    "checked_monotonic_s",
+                    "samples_after_stop",
+                    "reason",
+                    "execution_eligible",
+                    "start_pose",
+                    "final_pose"
+                  ]
+                },
+                "authorization_available": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "kind",
+                "available",
+                "blockers",
+                "active",
+                "phase",
+                "revision",
+                "plan_sha256",
+                "stop_confirmed",
+                "targets",
+                "error",
+                "note"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "mode",
+            "robot_connected",
+            "robot_feedback_valid",
+            "state",
+            "step",
+            "region",
+            "positioning_valid",
+            "available_points",
+            "current_point",
+            "remaining_time_s",
+            "actual_energy",
+            "actual_gap_mm",
+            "gap_valid",
+            "result",
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "type",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": [
+            "REPLY"
+          ]
+        },
+        "cmd": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ok": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "region": {
+                  "enum": [
+                    "BACK",
+                    "UPPER_LIMB",
+                    "LOWER_LIMB"
+                  ]
+                },
+                "points": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "side": {
+                        "enum": [
+                          "LEFT",
+                          "RIGHT",
+                          "MIDLINE"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "side"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "minItems": 1,
+                  "maxItems": 100,
+                  "uniqueItems": true
+                },
+                "total_time_s": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 86400
+                },
+                "energy": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "enum": [
+                        "TEMPERATURE",
+                        "FORCE"
+                      ]
+                    },
+                    "value": {
+                      "type": "number"
+                    },
+                    "unit": {
+                      "enum": [
+                        "C",
+                        "N"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "value",
+                    "unit"
+                  ],
+                  "additionalProperties": false
+                },
+                "gap_mm": {
+                  "type": "number"
+                },
+                "dwell_mode": {
+                  "enum": [
+                    "STATIC"
+                  ]
+                },
+                "transition_mode": {
+                  "enum": [
+                    "LIFT_MOVE_APPROACH"
+                  ]
+                },
+                "time_per_point_s": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "confirmation_revision": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9-]{36}$"
+                },
+                "confirmed_surface_points": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 80
+                      },
+                      "side": {
+                        "enum": [
+                          "LEFT",
+                          "RIGHT",
+                          "MIDLINE"
+                        ]
+                      },
+                      "x": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "y": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "camera_point_mm": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        },
+                        "minItems": 3,
+                        "maxItems": 3
+                      },
+                      "base_point_mm": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        },
+                        "minItems": 3,
+                        "maxItems": 3
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "side",
+                      "x",
+                      "y",
+                      "camera_point_mm",
+                      "base_point_mm"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "maxItems": 100,
+                  "minItems": 1
+                }
+              },
+              "required": [
+                "region",
+                "points",
+                "total_time_s",
+                "energy",
+                "dwell_mode",
+                "transition_mode",
+                "time_per_point_s"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "cmd",
+        "ok",
+        "message",
+        "data"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

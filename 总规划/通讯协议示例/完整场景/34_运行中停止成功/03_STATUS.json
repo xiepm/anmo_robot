@@ -1,0 +1,41 @@
+{
+  "type": "STATUS",
+  "data": {
+    "mode": "SIMULATION",
+    "robot_connected": true,
+    "robot_feedback_valid": true,
+    "state": "STOPPING",
+    "step": "NONE",
+    "region": "BACK",
+    "positioning_valid": true,
+    "available_points": [
+      {
+        "name": "大椎",
+        "side": "MIDLINE"
+      },
+      {
+        "name": "肩井",
+        "side": "LEFT"
+      },
+      {
+        "name": "肩井",
+        "side": "RIGHT"
+      }
+    ],
+    "current_point": {
+      "name": "大椎",
+      "side": "MIDLINE"
+    },
+    "remaining_time_s": 52,
+    "actual_energy": {
+      "type": "TEMPERATURE",
+      "value": null,
+      "unit": "C",
+      "valid": false
+    },
+    "actual_gap_mm": null,
+    "gap_valid": false,
+    "result": "NONE",
+    "error": ""
+  }
+}

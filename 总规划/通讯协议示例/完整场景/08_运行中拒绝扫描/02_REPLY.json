@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": "SCAN",
+  "ok": false,
+  "message": "正在运行，不能扫描",
+  "data": {}
+}

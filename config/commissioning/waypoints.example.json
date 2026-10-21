@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "mode": "FREE_SPACE_WAYPOINTS",
+  "robot_model": "elfin5_l",
+  "frame": "Base",
+  "path_confirmed": false,
+  "tool_pose_mm_deg": [null, null, null, null, null, null],
+  "start_pose": {
+    "x_mm": null, "y_mm": null, "z_mm": null,
+    "rx_deg": null, "ry_deg": null, "rz_deg": null
+  },
+  "speed": 10,
+  "acceleration": 20,
+  "max_segment_mm": 100,
+  "max_rotation_deg": 10,
+  "workspace_mm": {
+    "min": [null, null, null],
+    "max": [null, null, null]
+  },
+  "move_timeout_s": 60,
+  "points": [],
+  "target_reference": "FLANGE",
+  "auto_subdivide": true,
+  "return_from_pose": null
+}

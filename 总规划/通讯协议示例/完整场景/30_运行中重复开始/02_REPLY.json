@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": "START",
+  "ok": false,
+  "message": "正在运行，不能重复开始",
+  "data": {}
+}

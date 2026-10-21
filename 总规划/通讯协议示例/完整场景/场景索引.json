@@ -1,0 +1,1207 @@
+[
+  {
+    "name": "查询空闲状态",
+    "precondition": "下位机已启动，尚未定位。",
+    "expected": "GET_STATUS直接返回完整STATUS，没有额外REPLY。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/01_查询空闲状态/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/01_查询空闲状态/02_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "查询设备故障状态",
+    "precondition": "控制柜连接中断，UI与控制程序仍连接。",
+    "expected": "查询仍成功获得STATUS；设备故障通过ERROR表达，不把GET_STATUS本身当失败。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/02_查询设备故障状态/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/02_查询设备故障状态/02_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "扫描背部成功",
+    "precondition": "IDLE或READY，模拟定位器已配置本部位点位。",
+    "expected": "先回复受理，随后SCANNING，完成后IDLE且定位有效；扫描不会直接进入READY。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/03_扫描背部成功/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/03_扫描背部成功/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/03_扫描背部成功/03_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/03_扫描背部成功/04_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "扫描上肢成功",
+    "precondition": "IDLE或READY，模拟定位器已配置本部位点位。",
+    "expected": "先回复受理，随后SCANNING，完成后IDLE且定位有效；扫描不会直接进入READY。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/04_扫描上肢成功/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/04_扫描上肢成功/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/04_扫描上肢成功/03_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/04_扫描上肢成功/04_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "扫描下肢成功",
+    "precondition": "IDLE或READY，模拟定位器已配置本部位点位。",
+    "expected": "先回复受理，随后SCANNING，完成后IDLE且定位有效；扫描不会直接进入READY。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/05_扫描下肢成功/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/05_扫描下肢成功/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/05_扫描下肢成功/03_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/05_扫描下肢成功/04_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "扫描执行失败",
+    "precondition": "扫描已经受理，但模拟图像无可用深度。",
+    "expected": "清除旧定位/方案；IDLE、定位无效、可用穴位为空，并显示失败原因。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/06_扫描执行失败/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/06_扫描执行失败/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/06_扫描执行失败/03_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/06_扫描执行失败/04_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "未接视觉拒绝扫描",
+    "precondition": "IDLE，视觉模块未配置。",
+    "expected": "返回失败，不产生虚假扫描结果。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/07_未接视觉拒绝扫描/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/07_未接视觉拒绝扫描/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/07_未接视觉拒绝扫描/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "运行中拒绝扫描",
+    "precondition": "RUNNING，背部第一点剩余52秒。",
+    "expected": "拒绝命令，保留当前执行任务。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/08_运行中拒绝扫描/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/08_运行中拒绝扫描/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/08_运行中拒绝扫描/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "确认背部温度方案",
+    "precondition": "当前部位已定位；模拟器具备对应末端能力。",
+    "expected": "完整回显已保存参数，每点时间为总时间除以点数，进入READY。力方案不包含gap_mm。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/09_确认背部温度方案/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/09_确认背部温度方案/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/09_确认背部温度方案/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "确认背部力方案",
+    "precondition": "当前部位已定位；模拟器具备对应末端能力。",
+    "expected": "完整回显已保存参数，每点时间为总时间除以点数，进入READY。力方案不包含gap_mm。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/10_确认背部力方案/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/10_确认背部力方案/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/10_确认背部力方案/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "确认上肢温度方案",
+    "precondition": "当前部位已定位；模拟器具备对应末端能力。",
+    "expected": "完整回显已保存参数，每点时间为总时间除以点数，进入READY。力方案不包含gap_mm。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/11_确认上肢温度方案/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/11_确认上肢温度方案/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/11_确认上肢温度方案/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "确认上肢力方案",
+    "precondition": "当前部位已定位；模拟器具备对应末端能力。",
+    "expected": "完整回显已保存参数，每点时间为总时间除以点数，进入READY。力方案不包含gap_mm。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/12_确认上肢力方案/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/12_确认上肢力方案/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/12_确认上肢力方案/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "确认下肢温度方案",
+    "precondition": "当前部位已定位；模拟器具备对应末端能力。",
+    "expected": "完整回显已保存参数，每点时间为总时间除以点数，进入READY。力方案不包含gap_mm。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/13_确认下肢温度方案/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/13_确认下肢温度方案/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/13_确认下肢温度方案/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "确认下肢力方案",
+    "precondition": "当前部位已定位；模拟器具备对应末端能力。",
+    "expected": "完整回显已保存参数，每点时间为总时间除以点数，进入READY。力方案不包含gap_mm。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/14_确认下肢力方案/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/14_确认下肢力方案/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/14_确认下肢力方案/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "拒绝方案未定位",
+    "precondition": "IDLE或READY；定位部位为BACK（未定位用例除外）；按用例设置故障输入。",
+    "expected": "失败回复，清除旧待执行方案并回IDLE，不产生设备动作。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/15_拒绝方案未定位/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/15_拒绝方案未定位/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/15_拒绝方案未定位/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "拒绝方案时间不能均分",
+    "precondition": "IDLE或READY；定位部位为BACK（未定位用例除外）；按用例设置故障输入。",
+    "expected": "失败回复，清除旧待执行方案并回IDLE，不产生设备动作。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/16_拒绝方案时间不能均分/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/16_拒绝方案时间不能均分/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/16_拒绝方案时间不能均分/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "拒绝方案空穴位列表",
+    "precondition": "IDLE或READY；定位部位为BACK（未定位用例除外）；按用例设置故障输入。",
+    "expected": "失败回复，清除旧待执行方案并回IDLE，不产生设备动作。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/17_拒绝方案空穴位列表/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/17_拒绝方案空穴位列表/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/17_拒绝方案空穴位列表/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "拒绝方案未知穴位",
+    "precondition": "IDLE或READY；定位部位为BACK（未定位用例除外）；按用例设置故障输入。",
+    "expected": "失败回复，清除旧待执行方案并回IDLE，不产生设备动作。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/18_拒绝方案未知穴位/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/18_拒绝方案未知穴位/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/18_拒绝方案未知穴位/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "拒绝方案侧别错误",
+    "precondition": "IDLE或READY；定位部位为BACK（未定位用例除外）；按用例设置故障输入。",
+    "expected": "失败回复，清除旧待执行方案并回IDLE，不产生设备动作。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/19_拒绝方案侧别错误/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/19_拒绝方案侧别错误/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/19_拒绝方案侧别错误/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "拒绝方案能量单位错误",
+    "precondition": "IDLE或READY；定位部位为BACK（未定位用例除外）；按用例设置故障输入。",
+    "expected": "失败回复，清除旧待执行方案并回IDLE，不产生设备动作。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/20_拒绝方案能量单位错误/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/20_拒绝方案能量单位错误/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/20_拒绝方案能量单位错误/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "拒绝方案能量超出范围",
+    "precondition": "IDLE或READY；定位部位为BACK（未定位用例除外）；按用例设置故障输入。",
+    "expected": "失败回复，清除旧待执行方案并回IDLE，不产生设备动作。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/21_拒绝方案能量超出范围/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/21_拒绝方案能量超出范围/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/21_拒绝方案能量超出范围/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "拒绝方案温度方案缺间隙",
+    "precondition": "IDLE或READY；定位部位为BACK（未定位用例除外）；按用例设置故障输入。",
+    "expected": "失败回复，清除旧待执行方案并回IDLE，不产生设备动作。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/22_拒绝方案温度方案缺间隙/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/22_拒绝方案温度方案缺间隙/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/22_拒绝方案温度方案缺间隙/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "拒绝方案停留方式未实现",
+    "precondition": "IDLE或READY；定位部位为BACK（未定位用例除外）；按用例设置故障输入。",
+    "expected": "失败回复，清除旧待执行方案并回IDLE，不产生设备动作。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/23_拒绝方案停留方式未实现/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/23_拒绝方案停留方式未实现/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/23_拒绝方案停留方式未实现/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "拒绝方案过渡方式未实现",
+    "precondition": "IDLE或READY；定位部位为BACK（未定位用例除外）；按用例设置故障输入。",
+    "expected": "失败回复，清除旧待执行方案并回IDLE，不产生设备动作。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/24_拒绝方案过渡方式未实现/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/24_拒绝方案过渡方式未实现/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/24_拒绝方案过渡方式未实现/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "拒绝方案末端能力缺失",
+    "precondition": "IDLE或READY；定位部位为BACK（未定位用例除外）；按用例设置故障输入。",
+    "expected": "失败回复，清除旧待执行方案并回IDLE，不产生设备动作。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/25_拒绝方案末端能力缺失/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/25_拒绝方案末端能力缺失/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/25_拒绝方案末端能力缺失/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "拒绝方案定位部位不匹配",
+    "precondition": "IDLE或READY；定位部位为BACK（未定位用例除外）；按用例设置故障输入。",
+    "expected": "失败回复，清除旧待执行方案并回IDLE，不产生设备动作。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/26_拒绝方案定位部位不匹配/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/26_拒绝方案定位部位不匹配/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/26_拒绝方案定位部位不匹配/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "运行中拒绝修改方案",
+    "precondition": "RUNNING，当前方案还剩52秒。",
+    "expected": "只拒绝新请求，不清除或替换当前正在执行的方案。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/27_运行中拒绝修改方案/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/27_运行中拒绝修改方案/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/27_运行中拒绝修改方案/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "开始成功",
+    "precondition": "READY，方案为背部三点60秒，设备及定位有效。",
+    "expected": "回复受理后执行；接近不扣时间，到位后才进入DWELL并计时。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/28_开始成功/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/28_开始成功/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/28_开始成功/03_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/28_开始成功/04_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/28_开始成功/05_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "没有方案拒绝开始",
+    "precondition": "IDLE，无已确认方案。",
+    "expected": "不运动，不恢复上一任务。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/29_没有方案拒绝开始/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/29_没有方案拒绝开始/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/29_没有方案拒绝开始/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "运行中重复开始",
+    "precondition": "RUNNING，第一条START已受理。",
+    "expected": "拒绝第二次START，只执行一轮任务。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/30_运行中重复开始/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/30_运行中重复开始/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/30_运行中重复开始/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "开始前定位失效",
+    "precondition": "原为READY，开始前检测到人体/肢体移动。",
+    "expected": "拒绝开始，旧定位和方案作废，要求重新定位。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/31_开始前定位失效/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/31_开始前定位失效/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/31_开始前定位失效/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "开始前设备故障",
+    "precondition": "原为READY，开始检查发现急停有效。",
+    "expected": "拒绝运动并进入ERROR。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/32_开始前设备故障/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/32_开始前设备故障/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/32_开始前设备故障/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "完整三点运行至正常完成",
+    "precondition": "START已成功；背部三点，每点有效停留20秒。",
+    "expected": "示例列出所有动作边界状态。实际每200ms仍发送完整STATUS；只有DWELL扣时间；退出确认后才COMPLETED。",
+    "messages": [
+      {
+        "direction": "下→上",
+        "file": "完整场景/33_完整三点运行至正常完成/01_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/33_完整三点运行至正常完成/02_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/33_完整三点运行至正常完成/03_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/33_完整三点运行至正常完成/04_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/33_完整三点运行至正常完成/05_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/33_完整三点运行至正常完成/06_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/33_完整三点运行至正常完成/07_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/33_完整三点运行至正常完成/08_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/33_完整三点运行至正常完成/09_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/33_完整三点运行至正常完成/10_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/33_完整三点运行至正常完成/11_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/33_完整三点运行至正常完成/12_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/33_完整三点运行至正常完成/13_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/33_完整三点运行至正常完成/14_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/33_完整三点运行至正常完成/15_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/33_完整三点运行至正常完成/16_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "运行中停止成功",
+    "precondition": "RUNNING，剩余52秒。",
+    "expected": "受理不等于已停；STOPPING保留冻结的剩余时间，确认停止后IDLE并清除方案，result为STOPPED。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/34_运行中停止成功/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/34_运行中停止成功/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/34_运行中停止成功/03_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/34_运行中停止成功/04_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "取消扫描成功",
+    "precondition": "SCANNING。",
+    "expected": "取消确认后回IDLE，定位无效；迟到的扫描成功不能重新激活定位。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/35_取消扫描成功/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/35_取消扫描成功/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/35_取消扫描成功/03_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/35_取消扫描成功/04_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "就绪时停止",
+    "precondition": "READY，方案已保存，尚未执行。",
+    "expected": "清除方案，不发无必要的运动；之后START须失败。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/36_就绪时停止/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/36_就绪时停止/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/36_就绪时停止/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "空闲时停止",
+    "precondition": "IDLE，无待执行方案，原result为NONE。",
+    "expected": "返回已停止，保持IDLE及原结束结果，无设备动作。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/37_空闲时停止/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/37_空闲时停止/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/37_空闲时停止/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "停止过程中再次停止",
+    "precondition": "STOPPING，首个停止尚未完成。",
+    "expected": "不重新发起动作或退出轨迹，不重置停止超时。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/38_停止过程中再次停止/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/38_停止过程中再次停止/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/38_停止过程中再次停止/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "停止执行失败",
+    "precondition": "STOP已受理，但在约定截止时间内未确认停止。",
+    "expected": "不是把先前REPLY改成失败；通过ERROR报告后续执行失败，不显示已停止或已退让。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/39_停止执行失败/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/39_停止执行失败/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/39_停止执行失败/03_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/39_停止执行失败/04_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "故障状态再次停止",
+    "precondition": "ERROR，机械臂已断联。",
+    "expected": "可接受停止意图，但不能清除故障或伪报已停。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/40_故障状态再次停止/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/40_故障状态再次停止/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/40_故障状态再次停止/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "运动阶段故障",
+    "precondition": "RUNNING时厂家报告机械臂故障，反馈仍可读。",
+    "expected": "立即上报ERROR，取消后续动作，不能等UI发STOP。",
+    "messages": [
+      {
+        "direction": "下→上",
+        "file": "完整场景/41_运动阶段故障/01_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "设备反馈冻结",
+    "precondition": "UI仍收到STATUS，但机器人读取线程已失去新鲜数据。",
+    "expected": "connected可能仍为true，robot_feedback_valid必须变false，定位失效并报ERROR。",
+    "messages": [
+      {
+        "direction": "下→上",
+        "file": "完整场景/42_设备反馈冻结/01_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "温度反馈失效",
+    "precondition": "温度方案执行中，温度反馈超过有效期。",
+    "expected": "实际值为null且valid=false，触发ERROR和停止处理，不拿目标温度替代。",
+    "messages": [
+      {
+        "direction": "下→上",
+        "file": "完整场景/43_温度反馈失效/01_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "UI存活超时",
+    "precondition": "WebSocket尚未关闭，但UI连续3秒未发合法请求。",
+    "expected": "下位机主动停止；本场景消息仅在连接仍能传送时可被UI收到。",
+    "messages": [
+      {
+        "direction": "下→上",
+        "file": "完整场景/44_UI存活超时/01_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/44_UI存活超时/02_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "重启后首次查询",
+    "precondition": "控制程序重新启动并完成初始化，旧方案及定位均清除。",
+    "expected": "返回IDLE且不得重放旧动作；若设备状态未知，应使用设备故障场景的ERROR报文。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/45_重启后首次查询/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/45_重启后首次查询/02_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "未知命令",
+    "precondition": "收到未支持的命令。",
+    "expected": "拒绝，不发生任何设备动作，原状态保持。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/46_未知命令/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/46_未知命令/02_REPLY.json"
+      }
+    ]
+  },
+  {
+    "name": "请求参数类型错误",
+    "precondition": "START只允许空对象data。",
+    "expected": "拒绝错误格式，不产生运动。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/47_请求参数类型错误/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/47_请求参数类型错误/02_REPLY.json"
+      }
+    ]
+  },
+  {
+    "name": "无法解析的报文",
+    "precondition": "客户端发来不完整JSON或缺少可识别的cmd。",
+    "expected": "用cmd=null返回格式错误；忽略该请求，不改变原任务。",
+    "messages": [
+      {
+        "direction": "下→上",
+        "file": "完整场景/48_无法解析的报文/01_REPLY.json"
+      }
+    ]
+  },
+  {
+    "name": "拒绝方案重复穴位",
+    "precondition": "IDLE或READY，背部定位有效。",
+    "expected": "完整失败回复，清除旧待执行方案；不产生设备动作。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/49_拒绝方案重复穴位/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/49_拒绝方案重复穴位/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/49_拒绝方案重复穴位/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "拒绝方案零时间",
+    "precondition": "IDLE或READY，背部定位有效。",
+    "expected": "完整失败回复，清除旧待执行方案；不产生设备动作。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/50_拒绝方案零时间/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/50_拒绝方案零时间/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/50_拒绝方案零时间/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "拒绝方案负时间",
+    "precondition": "IDLE或READY，背部定位有效。",
+    "expected": "完整失败回复，清除旧待执行方案；不产生设备动作。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/51_拒绝方案负时间/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/51_拒绝方案负时间/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/51_拒绝方案负时间/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "拒绝方案非整数时间",
+    "precondition": "IDLE或READY，背部定位有效。",
+    "expected": "完整失败回复，清除旧待执行方案；不产生设备动作。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/52_拒绝方案非整数时间/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/52_拒绝方案非整数时间/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/52_拒绝方案非整数时间/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "拒绝方案间隙非法",
+    "precondition": "IDLE或READY，背部定位有效。",
+    "expected": "完整失败回复，清除旧待执行方案；不产生设备动作。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/53_拒绝方案间隙非法/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/53_拒绝方案间隙非法/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/53_拒绝方案间隙非法/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "拒绝方案多余字段",
+    "precondition": "IDLE或READY，背部定位有效。",
+    "expected": "完整失败回复，清除旧待执行方案；不产生设备动作。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/54_拒绝方案多余字段/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/54_拒绝方案多余字段/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/54_拒绝方案多余字段/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "扫描部位非法",
+    "precondition": "IDLE。",
+    "expected": "拒绝非法部位，不进入SCANNING。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/55_扫描部位非法/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/55_扫描部位非法/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/55_扫描部位非法/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "扫描缺少部位",
+    "precondition": "IDLE。",
+    "expected": "拒绝缺失参数，不猜测部位。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/56_扫描缺少部位/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/56_扫描缺少部位/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/56_扫描缺少部位/03_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "扫描执行超时",
+    "precondition": "模拟扫描阶段截止期配置30秒。",
+    "expected": "受理后SCANNING，30秒超时则IDLE且定位无效。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/57_扫描执行超时/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/57_扫描执行超时/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/57_扫描执行超时/03_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/57_扫描执行超时/04_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "开始受理后SDK拒绝",
+    "precondition": "READY且START受理，但提交第一运动段时SDK明确拒绝。",
+    "expected": "先前受理回复不撤销；通过ERROR报告执行失败，无有效停留时间。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/58_开始受理后SDK拒绝/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/58_开始受理后SDK拒绝/02_REPLY.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/58_开始受理后SDK拒绝/03_STATUS.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/58_开始受理后SDK拒绝/04_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "按摩实际力反馈",
+    "precondition": "上肢力方案已启动并完成接近，有效工作5秒。",
+    "expected": "报告真实或模拟力值及N单位，间隙为null/false，不假装存在温度反馈。",
+    "messages": [
+      {
+        "direction": "下→上",
+        "file": "完整场景/59_按摩实际力反馈/01_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "按摩力反馈失效",
+    "precondition": "上肢力方案执行时传感器数据失效。",
+    "expected": "力value=null且valid=false，冻结剩余时间、ERROR并发起停止。",
+    "messages": [
+      {
+        "direction": "下→上",
+        "file": "完整场景/60_按摩力反馈失效/01_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "间隙反馈失效",
+    "precondition": "背部温度方案运行，必要间隙反馈失效。",
+    "expected": "不使用最后有效间隙值继续运行；ERROR且gap_valid=false。",
+    "messages": [
+      {
+        "direction": "下→上",
+        "file": "完整场景/61_间隙反馈失效/01_STATUS.json"
+      }
+    ]
+  },
+  {
+    "name": "查询请求格式错误",
+    "precondition": "GET_STATUS带有非空data。",
+    "expected": "合法查询直接STATUS；格式错误的查询返回失败REPLY，不影响原状态。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/62_查询请求格式错误/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/62_查询请求格式错误/02_REPLY.json"
+      }
+    ]
+  },
+  {
+    "name": "停止请求格式错误",
+    "precondition": "STOP的data为错误类型。",
+    "expected": "该非法消息被拒绝；正常空对象STOP始终可处理。",
+    "messages": [
+      {
+        "direction": "上→下",
+        "file": "完整场景/63_停止请求格式错误/01_请求.json"
+      },
+      {
+        "direction": "下→上",
+        "file": "完整场景/63_停止请求格式错误/02_REPLY.json"
+      }
+    ]
+  }
+]

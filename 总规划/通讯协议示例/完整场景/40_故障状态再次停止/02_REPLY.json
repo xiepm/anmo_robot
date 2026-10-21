@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": "STOP",
+  "ok": true,
+  "message": "已记录停止请求，设备断联，无法确认执行结果",
+  "data": {}
+}

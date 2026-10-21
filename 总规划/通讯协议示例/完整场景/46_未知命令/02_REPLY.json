@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": "PAUSE",
+  "ok": false,
+  "message": "不支持的命令，初版仅提供停止",
+  "data": {}
+}

@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": "START",
+  "ok": false,
+  "message": "定位已失效，请重新扫描",
+  "data": {}
+}

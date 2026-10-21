@@ -1,0 +1,7 @@
+{
+  "id": "cmd-003",
+  "cmd": "START",
+  "data": {
+    "plan_id": "plan-001"
+  }
+}

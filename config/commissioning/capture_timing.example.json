@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "verified": false,
+  "model": "D435I_MANUAL_RGB_INTERVAL_V1",
+  "camera_serial": "",
+  "firmware": "5.15.1.55",
+  "sdk_version": "2.58.4",
+  "fps": 30,
+  "color_exposure_unit_us": 100,
+  "depth_exposure_unit_us": 1,
+  "color_exposure_raw_range": [1, 300]
+}

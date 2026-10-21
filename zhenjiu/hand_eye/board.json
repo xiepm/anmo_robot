@@ -1,0 +1,11 @@
+{
+  "type": "checkerboard",
+  "inner_corners": [9, 6],
+  "outer_pattern_mm": [240.0, 170.0],
+  "squares": [10, 7],
+  "dimensions_source": "User measured black-white pattern outer boundary, 2026-10-13",
+  "reference": "flange",
+  "mounting_source": "User confirmed camera rigidly attached to output flange, 2026-10-13",
+  "target_frame": "robot_base",
+  "calibration_valid": false
+}

@@ -1,0 +1,3 @@
+[submodule "src/elfin_robot_ros2"]
+	path = src/elfin_robot_ros2
+	url = https://github.com/huayan-robotics/elfin_robot_ros2.git

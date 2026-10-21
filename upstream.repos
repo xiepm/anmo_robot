@@ -1,0 +1,5 @@
+repositories:
+  elfin_robot_ros2:
+    type: git
+    url: https://github.com/huayan-robotics/elfin_robot_ros2.git
+    version: 1381e3f6d404eaf3311cae4311641e4d8f369b1a

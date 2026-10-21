@@ -1,0 +1,7 @@
+{
+  "type": "REPLY",
+  "cmd": "SET_PLAN",
+  "ok": false,
+  "message": "肩井不允许MIDLINE侧别",
+  "data": {}
+}
